@@ -692,7 +692,7 @@ app-listing-card {
 .card-data-sheet {
   grid-row: 2;
   grid-column: 1;
-  z-index: 2;
+  z-index: 4;
   position: relative;
   margin: -0.5rem 0.65rem 0.65rem;
   border-radius: 18px;
@@ -802,7 +802,7 @@ app-listing-card {
   left: 0.65rem;
   right: 0.65rem;
   bottom: 0.65rem;
-  z-index: 4;
+  z-index: 5;
   display: flex;
   align-items: stretch;
   gap: 0.45rem;
@@ -955,9 +955,17 @@ app-listing-card {
 
 .gallery-controls {
   position: absolute;
-  inset: 0;
-  z-index: 5;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 168px;
+  z-index: 2;
   pointer-events: none;
+}
+
+.card.gallery-focus .gallery-controls {
+  height: auto;
+  bottom: 0;
 }
 
 .gallery-nav {
