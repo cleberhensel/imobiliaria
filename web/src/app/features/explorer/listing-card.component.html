@@ -29,47 +29,47 @@
     }
   </div>
 
-  <div class="card-data-sheet glass-panel">
-    <div class="card-body-full">
-      <div class="card-top">
-        <div class="card-top-copy">
-          <h3 class="card-address">
-            <a [href]="item.url" target="_blank" rel="noopener noreferrer">{{ formatLogradouro() }}</a>
-          </h3>
-          <p class="card-neighbourhood">{{ item.neighbourhood || 'Sem bairro' }}</p>
-          <p class="card-listing-title">{{ displayTitle() }}</p>
-        </div>
-        <div class="card-top-aside">
-          <strong class="card-price">{{ formatMoney(item.totalCost) }}</strong>
-          <div class="card-top-actions">
-            <button type="button" class="card-detail-btn" (click)="openDetail.emit(item.id)">Detalhes</button>
-            <button
-              type="button"
-              class="card-data-toggle glass-control"
-              (click)="onToggleCardData($event)"
-              [attr.aria-label]="cardDataExpanded ? 'Retrair dados' : 'Expandir dados'"
-              [attr.title]="cardDataExpanded ? 'Retrair' : 'Expandir'"
-            >
-              @if (cardDataExpanded) {
+  @if (cardDataExpanded && !galleryExpanded) {
+    <div class="card-data-sheet glass-panel">
+      <div class="card-body-full">
+        <div class="card-top">
+          <div class="card-top-copy">
+            <h3 class="card-address">
+              <a [href]="item.url" target="_blank" rel="noopener noreferrer">{{ formatLogradouro() }}</a>
+            </h3>
+            <p class="card-neighbourhood">{{ item.neighbourhood || 'Sem bairro' }}</p>
+            <p class="card-listing-title">{{ displayTitle() }}</p>
+          </div>
+          <div class="card-top-aside">
+            <strong class="card-price">{{ formatMoney(item.totalCost) }}</strong>
+            <div class="card-top-actions">
+              <button type="button" class="card-detail-btn" (click)="openDetail.emit(item.id)">Detalhes</button>
+              <button
+                type="button"
+                class="card-data-toggle collapse glass-control"
+                (click)="onCollapseCardData($event)"
+                aria-label="Retrair dados"
+                title="Retrair"
+              >
                 <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
                   <path d="M8 10l4 4 4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
-              } @else {
-                <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
-                  <path d="M8 14l4-4 4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-              }
-            </button>
+              </button>
+            </div>
           </div>
         </div>
-      </div>
-      @if (cardDataExpanded) {
         <div class="card-body-grid">
           <div class="card-info">
             <div class="info-grid">
-              <div class="info-item info-item-ppm">
+              <div
+                class="info-item info-item-ppm"
+                [class.has-ppm-avg]="neighbourhoodAvgPpm() !== null"
+              >
                 <span>R$/m²</span>
-                <strong [class]="ppmTierClass()" [attr.title]="ppmTierTitle()">{{ item.pricePerSqm ? formatMoney(item.pricePerSqm) : '—' }}</strong>
+                <strong [class]="ppmTierClass()">{{ item.pricePerSqm ? formatMoney(item.pricePerSqm) : '—' }}</strong>
+                @if (neighbourhoodAvgPpm() !== null) {
+                  <span class="ppm-avg-tooltip" role="tooltip">{{ neighbourhoodAvgPpmLabel() }}</span>
+                }
               </div>
               <div class="info-item">
                 <span>Bairro</span>
@@ -110,26 +110,28 @@
             <span class="tag">{{ item.sourceLabel || item.source }}</span>
           </div>
         </div>
-      }
+      </div>
     </div>
-  </div>
+  }
 
-  <div class="card-glass-footer glass-panel" [hidden]="!galleryExpanded">
-    <button type="button" class="compact-detail-trigger" (click)="openDetail.emit(item.id)">
-      <span class="compact-address">{{ formatLogradouro() }}</span>
-      <span class="compact-neighbourhood">{{ item.neighbourhood || 'Sem bairro' }}</span>
-      <strong class="compact-total">{{ formatMoney(item.totalCost) }}</strong>
-    </button>
-    <button
-      type="button"
-      class="card-data-toggle expand glass-control"
-      (click)="onGalleryBack($event)"
-      aria-label="Voltar aos dados do card"
-      title="Voltar"
-    >
-      <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
-        <path d="M8 14l4-4 4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    </button>
-  </div>
+  @if (!cardDataExpanded || galleryExpanded) {
+    <div class="card-glass-footer glass-panel">
+      <button type="button" class="compact-detail-trigger" (click)="openDetail.emit(item.id)">
+        <span class="compact-address">{{ formatLogradouro() }}</span>
+        <span class="compact-neighbourhood">{{ item.neighbourhood || 'Sem bairro' }}</span>
+        <strong class="compact-total">{{ formatMoney(item.totalCost) }}</strong>
+      </button>
+      <button
+        type="button"
+        class="card-data-toggle expand glass-control"
+        (click)="onFooterExpand($event)"
+        aria-label="Expandir dados"
+        title="Expandir"
+      >
+        <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
+          <path d="M8 14l4-4 4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+  }
 </article>

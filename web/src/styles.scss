@@ -660,10 +660,16 @@ app-listing-card {
   border-radius: 22px;
   overflow: hidden;
   display: grid;
-  grid-template-rows: 168px auto;
+  grid-template-rows: 168px minmax(0, 1fr);
   box-shadow: var(--shadow);
   height: 100%;
   align-self: stretch;
+}
+
+.card:not(.card-data-collapsed):not(.gallery-focus) {
+  grid-template-rows: 168px auto;
+  height: auto;
+  align-self: start;
 }
 
 .card .glass-control {
@@ -721,8 +727,8 @@ app-listing-card {
   gap: 0.35rem;
 }
 
-.card.card-data-collapsed .card-data-sheet {
-  padding-bottom: 0.55rem;
+.card.card-data-collapsed:not(.gallery-focus) {
+  min-height: 420px;
 }
 
 .card.gallery-focus {
@@ -1116,6 +1122,42 @@ app-listing-card {
 
 .info-item-ppm strong {
   font-weight: 700;
+}
+
+.info-item-ppm.has-ppm-avg {
+  position: relative;
+  cursor: help;
+}
+
+.ppm-avg-tooltip {
+  position: absolute;
+  left: 0;
+  top: calc(100% + 0.3rem);
+  z-index: 6;
+  min-width: max-content;
+  max-width: 14rem;
+  padding: 0.32rem 0.48rem;
+  border-radius: 8px;
+  font-size: 0.62rem;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--ink);
+  background: rgba(15, 18, 24, 0.96);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-4px);
+  transition: opacity 0.14s ease, transform 0.14s ease, visibility 0.14s ease;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.info-item-ppm.has-ppm-avg:hover .ppm-avg-tooltip,
+.info-item-ppm.has-ppm-avg:focus-within .ppm-avg-tooltip {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
 }
 
 .cost-grid {

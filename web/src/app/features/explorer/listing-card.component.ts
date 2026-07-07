@@ -89,15 +89,19 @@ export class ListingCardComponent {
     return normalizeListingTitle(this.item.title);
   }
 
-  ppmTierClass(): string {
-    const avg = this.state.getNeighbourhoodAvgPpm(this.item.neighbourhood);
-    return ppmTierClass(getPpmTier(this.item.pricePerSqm, avg));
+  neighbourhoodAvgPpm(): number | null {
+    return this.state.getNeighbourhoodAvgPpm(this.item.neighbourhood);
   }
 
-  ppmTierTitle(): string | null {
-    const avg = this.state.getNeighbourhoodAvgPpm(this.item.neighbourhood);
-    if (!avg) return null;
+  neighbourhoodAvgPpmLabel(): string {
+    const avg = this.neighbourhoodAvgPpm();
+    if (!avg) return '';
     return `Média do bairro: ${formatBrl(avg)}/m²`;
+  }
+
+  ppmTierClass(): string {
+    const avg = this.neighbourhoodAvgPpm();
+    return ppmTierClass(getPpmTier(this.item.pricePerSqm, avg));
   }
 
   onPrev(event: Event): void {
@@ -116,16 +120,19 @@ export class ListingCardComponent {
     this.navigatePhoto(1);
   }
 
-  onGalleryBack(event: Event): void {
+  onCollapseCardData(event: Event): void {
     event.preventDefault();
     event.stopPropagation();
-    this.state.setGalleryExpanded(this.item.id, false);
+    this.state.setCardDataExpanded(this.item.id, false);
   }
 
-  onToggleCardData(event: Event): void {
+  onFooterExpand(event: Event): void {
     event.preventDefault();
     event.stopPropagation();
-    this.state.setCardDataExpanded(this.item.id, !this.cardDataExpanded);
+    if (this.galleryExpanded) {
+      this.state.setGalleryExpanded(this.item.id, false);
+    }
+    this.state.setCardDataExpanded(this.item.id, true);
   }
 
   private navigatePhoto(delta: number): void {
