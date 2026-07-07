@@ -1108,6 +1108,18 @@ app-listing-card {
   color: var(--ink);
 }
 
+.detail-spec-item strong.ppm-good {
+  color: #5ecf8f;
+}
+
+.detail-spec-item strong.ppm-fair {
+  color: var(--sun);
+}
+
+.detail-spec-item strong.ppm-high {
+  color: var(--rose);
+}
+
 .info-item strong.ppm-good {
   color: #5ecf8f;
 }
@@ -1122,6 +1134,11 @@ app-listing-card {
 
 .info-item-ppm strong {
   font-weight: 700;
+}
+
+.info-item-ppm-ref strong {
+  color: var(--muted);
+  font-weight: 600;
 }
 
 .info-item-ppm.has-ppm-avg {

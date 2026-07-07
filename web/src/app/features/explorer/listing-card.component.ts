@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ExplorerListing } from '../../core/models/explorer-listing.model';
 import { ExplorerState } from '../../core/data/explorer-state.service';
 import { formatBrl, formatLogradouro, getCostLines, getPpmTier, ppmTierClass } from '../../core/utils/cost.util';
+import { getRentPerSqm } from '../../core/utils/neighbourhood-ppm.util';
 import { normalizeListingTitle } from '../../core/utils/format.util';
 import { inject } from '@angular/core';
 
@@ -89,19 +90,23 @@ export class ListingCardComponent {
     return normalizeListingTitle(this.item.title);
   }
 
-  neighbourhoodAvgPpm(): number | null {
-    return this.state.getNeighbourhoodAvgPpm(this.item.neighbourhood);
+  neighbourhoodMedianRentPpm(): number | null {
+    return this.state.getNeighbourhoodMedianRentPpm(this.item.neighbourhood);
   }
 
-  neighbourhoodAvgPpmLabel(): string {
-    const avg = this.neighbourhoodAvgPpm();
-    if (!avg) return '';
-    return `Média do bairro: ${formatBrl(avg)}/m²`;
+  rentPerSqm(): number | null {
+    return getRentPerSqm(this.item);
+  }
+
+  neighbourhoodMedianRentPpmLabel(): string {
+    const median = this.neighbourhoodMedianRentPpm();
+    if (!median) return '';
+    return `Mediana do bairro (aluguel, aptos): ${formatBrl(median)}/m²`;
   }
 
   ppmTierClass(): string {
-    const avg = this.neighbourhoodAvgPpm();
-    return ppmTierClass(getPpmTier(this.item.pricePerSqm, avg));
+    const benchmark = this.neighbourhoodMedianRentPpm();
+    return ppmTierClass(getPpmTier(this.rentPerSqm(), benchmark));
   }
 
   onPrev(event: Event): void {

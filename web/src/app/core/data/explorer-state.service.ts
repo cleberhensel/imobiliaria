@@ -13,6 +13,11 @@ import {
 } from '../models/explorer-listing.model';
 import { PersistenceService } from './persistence.service';
 import { normalizeText } from '../utils/cost.util';
+import {
+  buildNeighbourhoodMedianRentPpm,
+  getRentPerSqm,
+  neighbourhoodKey,
+} from '../utils/neighbourhood-ppm.util';
 
 const DEFAULT_PRIORITIES: Priorities = {
   apartment: true,
@@ -69,25 +74,17 @@ export class ExplorerState {
   readonly compareCount = computed(() => this.pinned().size);
   readonly compareEnabled = computed(() => this.pinned().size >= 2);
 
-  readonly neighbourhoodAvgPpmByName = computed(() => {
-    const sums: Record<string, { total: number; count: number }> = {};
-    for (const item of this.enriched()) {
-      if (!item.pricePerSqm) continue;
-      const name = item.neighbourhood || 'Sem bairro';
-      if (!sums[name]) sums[name] = { total: 0, count: 0 };
-      sums[name].total += item.pricePerSqm;
-      sums[name].count += 1;
-    }
-    const averages: Record<string, number> = {};
-    for (const [name, { total, count }] of Object.entries(sums)) {
-      averages[name] = total / count;
-    }
-    return averages;
-  });
+  readonly neighbourhoodMedianRentPpmByKey = computed(() => (
+    buildNeighbourhoodMedianRentPpm(this.enriched())
+  ));
 
-  getNeighbourhoodAvgPpm(neighbourhood?: string | null): number | null {
-    const avg = this.neighbourhoodAvgPpmByName()[neighbourhood || 'Sem bairro'];
-    return avg ?? null;
+  getNeighbourhoodMedianRentPpm(neighbourhood?: string | null): number | null {
+    const key = neighbourhoodKey(neighbourhood);
+    return this.neighbourhoodMedianRentPpmByKey()[key] ?? null;
+  }
+
+  getListingRentPerSqm(item: ExplorerListing): number | null {
+    return getRentPerSqm(item);
   }
 
   async bootstrap(): Promise<void> {

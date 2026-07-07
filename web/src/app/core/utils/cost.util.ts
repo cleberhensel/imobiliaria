@@ -41,11 +41,11 @@ export type PpmTier = 'good' | 'fair' | 'high';
 
 export function getPpmTier(
   ppm: number | null | undefined,
-  neighbourhoodAvg: number | null | undefined,
+  neighbourhoodBenchmark: number | null | undefined,
   tolerance = 0.1,
 ): PpmTier | null {
-  if (!ppm || !neighbourhoodAvg) return null;
-  const ratio = ppm / neighbourhoodAvg;
+  if (!ppm || !neighbourhoodBenchmark) return null;
+  const ratio = ppm / neighbourhoodBenchmark;
   if (ratio <= 1 - tolerance) return 'good';
   if (ratio >= 1 + tolerance) return 'high';
   return 'fair';

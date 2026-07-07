@@ -63,13 +63,17 @@
             <div class="info-grid">
               <div
                 class="info-item info-item-ppm"
-                [class.has-ppm-avg]="neighbourhoodAvgPpm() !== null"
+                [class.has-ppm-avg]="neighbourhoodMedianRentPpm() !== null"
               >
-                <span>R$/m²</span>
-                <strong [class]="ppmTierClass()">{{ item.pricePerSqm ? formatMoney(item.pricePerSqm) : '—' }}</strong>
-                @if (neighbourhoodAvgPpm() !== null) {
-                  <span class="ppm-avg-tooltip" role="tooltip">{{ neighbourhoodAvgPpmLabel() }}</span>
+                <span>R$/m² alug.</span>
+                <strong [class]="ppmTierClass()">{{ rentPerSqm() ? formatMoney(rentPerSqm()!) : '—' }}</strong>
+                @if (neighbourhoodMedianRentPpm() !== null) {
+                  <span class="ppm-avg-tooltip" role="tooltip">{{ neighbourhoodMedianRentPpmLabel() }}</span>
                 }
+              </div>
+              <div class="info-item info-item-ppm-ref">
+                <span>Mediana bairro</span>
+                <strong>{{ neighbourhoodMedianRentPpm() ? formatMoney(neighbourhoodMedianRentPpm()!) : '—' }}</strong>
               </div>
               <div class="info-item">
                 <span>Bairro</span>

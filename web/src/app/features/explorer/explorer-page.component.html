@@ -264,10 +264,17 @@
 
           <div class="detail-block">
             <div class="detail-spec-grid">
+              <div class="detail-spec-item">
+                <span>R$/m² alug.</span>
+                <strong [class]="detailPpmTierClass(item)">{{ detailRentPerSqm(item) ? formatMoney(detailRentPerSqm(item)!) : '—' }}</strong>
+              </div>
+              <div class="detail-spec-item">
+                <span>Mediana bairro</span>
+                <strong>{{ detailNeighbourhoodMedianRentPpm(item) ? formatMoney(detailNeighbourhoodMedianRentPpm(item)!) : '—' }}</strong>
+              </div>
               <div class="detail-spec-item"><span>Quartos</span><strong>{{ item.bedrooms || '—' }}</strong></div>
               <div class="detail-spec-item"><span>Banheiros</span><strong>{{ item.bathrooms || '—' }}</strong></div>
               <div class="detail-spec-item"><span>Área</span><strong>{{ item.area ? item.area + ' m²' : '—' }}</strong></div>
-              <div class="detail-spec-item"><span>R$/m²</span><strong>{{ item.pricePerSqm ? formatMoney(item.pricePerSqm) : '—' }}</strong></div>
               <div class="detail-spec-item"><span>Vagas</span><strong>{{ item.parkingSpots || '—' }}</strong></div>
               <div class="detail-spec-item"><span>Fonte</span><strong>{{ item.sourceLabel || item.source }}</strong></div>
             </div>

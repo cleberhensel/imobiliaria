@@ -20,7 +20,10 @@ import {
   formatBrl,
   formatLogradouro,
   getCostLines,
+  getPpmTier,
+  ppmTierClass,
 } from '../../core/utils/cost.util';
+import { getRentPerSqm } from '../../core/utils/neighbourhood-ppm.util';
 import { ListingCardComponent } from './listing-card.component';
 
 @Component({
@@ -179,6 +182,21 @@ export class ExplorerPageComponent implements OnInit {
 
   formatMoney(amount: number): string {
     return amount > 0 ? formatBrl(amount) : '—';
+  }
+
+  detailRentPerSqm(item: ExplorerListing): number | null {
+    return getRentPerSqm(item);
+  }
+
+  detailNeighbourhoodMedianRentPpm(item: ExplorerListing): number | null {
+    return this.state.getNeighbourhoodMedianRentPpm(item.neighbourhood);
+  }
+
+  detailPpmTierClass(item: ExplorerListing): string {
+    return ppmTierClass(getPpmTier(
+      this.detailRentPerSqm(item),
+      this.detailNeighbourhoodMedianRentPpm(item),
+    ));
   }
 
   logradouro(item: ExplorerListing): string {
