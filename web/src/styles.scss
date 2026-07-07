@@ -780,7 +780,7 @@ app-listing-card {
   grid-row: 1;
   grid-column: 1;
   position: relative;
-  z-index: 2;
+  z-index: 6;
   min-height: 168px;
   pointer-events: none;
 }
@@ -956,34 +956,63 @@ app-listing-card {
 .gallery-controls {
   position: absolute;
   inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 0.55rem;
+  z-index: 5;
   pointer-events: none;
 }
 
-.gallery-controls > * {
-  pointer-events: auto;
-}
-
 .gallery-nav {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  color: #fff;
-  font-size: 0.9rem;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 30px;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  color: rgba(255, 255, 255, 0.38);
+  font-size: 1.35rem;
   line-height: 1;
   cursor: pointer;
   display: grid;
   place-items: center;
-  padding: 0;
-  flex-shrink: 0;
+  pointer-events: auto;
+  background: transparent;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  transition:
+    color 0.18s ease,
+    background 0.18s ease;
 }
 
-.gallery-nav:hover {
-  background: rgba(15, 18, 24, 0.92);
-  border-color: rgba(245, 166, 35, 0.45);
+.gallery-nav.prev {
+  left: 0;
+  border-radius: 22px 0 0 22px;
+  background: linear-gradient(to right, rgba(8, 10, 16, 0.28), rgba(8, 10, 16, 0));
+}
+
+.gallery-nav.next {
+  right: 0;
+  border-radius: 0 22px 22px 0;
+  background: linear-gradient(to left, rgba(8, 10, 16, 0.28), rgba(8, 10, 16, 0));
+}
+
+.gallery-nav.prev:hover,
+.gallery-nav.prev:focus-visible {
+  color: rgba(255, 255, 255, 0.96);
+  background: linear-gradient(to right, rgba(8, 10, 16, 0.62), rgba(8, 10, 16, 0.12));
+}
+
+.gallery-nav.next:hover,
+.gallery-nav.next:focus-visible {
+  color: rgba(255, 255, 255, 0.96);
+  background: linear-gradient(to left, rgba(8, 10, 16, 0.62), rgba(8, 10, 16, 0.12));
+}
+
+.gallery-nav:focus-visible {
+  outline: 2px solid rgba(245, 166, 35, 0.45);
+  outline-offset: -2px;
 }
 
 .gallery-counter {
@@ -994,6 +1023,7 @@ app-listing-card {
   border-radius: 999px;
   color: #fff;
   font-size: 0.66rem;
+  pointer-events: auto;
 }
 
 .card.gallery-focus .gallery-counter {

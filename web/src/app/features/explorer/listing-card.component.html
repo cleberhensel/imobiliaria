@@ -21,13 +21,16 @@
   <div class="card-image-zone">
     <div class="card-score glass-control" [class]="scoreClass">{{ score }}% aderência</div>
     @if (hasNav) {
-      <div class="gallery-controls">
-        <button type="button" class="gallery-nav prev glass-control" (click)="onPrev($event)" aria-label="Foto anterior">‹</button>
-        <button type="button" class="gallery-nav next glass-control" (click)="onNext($event)" aria-label="Próxima foto">›</button>
-        <span class="gallery-counter glass-control">{{ photoIndex + 1 }}/{{ photos.length }}</span>
-      </div>
+      <span class="gallery-counter glass-control">{{ photoIndex + 1 }}/{{ photos.length }}</span>
     }
   </div>
+
+  @if (hasNav) {
+    <div class="gallery-controls" aria-hidden="false">
+      <button type="button" class="gallery-nav prev" (click)="onPrev($event)" aria-label="Foto anterior">‹</button>
+      <button type="button" class="gallery-nav next" (click)="onNext($event)" aria-label="Próxima foto">›</button>
+    </div>
+  }
 
   @if (cardDataExpanded && !galleryExpanded) {
     <div class="card-data-sheet glass-panel">
