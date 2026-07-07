@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ExplorerListing } from '../../core/models/explorer-listing.model';
 import { ExplorerState } from '../../core/data/explorer-state.service';
-import { formatBrl, formatLogradouro, getCostLines } from '../../core/utils/cost.util';
+import { formatBrl, formatLogradouro, getCostLines, getPpmTier, ppmTierClass } from '../../core/utils/cost.util';
 import { normalizeListingTitle } from '../../core/utils/format.util';
 import { inject } from '@angular/core';
 
@@ -18,6 +18,7 @@ export class ListingCardComponent {
 
   get score() { return this.item.adherenceScore ?? this.item.fitScore; }
   get galleryExpanded() { return this.state.isGalleryExpanded(this.item.id); }
+  get cardDataExpanded() { return this.state.isCardDataExpanded(this.item.id); }
 
   get adherenceClass(): string {
     if (this.item.matchesAllPriorities) return 'adherence-high';
@@ -88,6 +89,17 @@ export class ListingCardComponent {
     return normalizeListingTitle(this.item.title);
   }
 
+  ppmTierClass(): string {
+    const avg = this.state.getNeighbourhoodAvgPpm(this.item.neighbourhood);
+    return ppmTierClass(getPpmTier(this.item.pricePerSqm, avg));
+  }
+
+  ppmTierTitle(): string | null {
+    const avg = this.state.getNeighbourhoodAvgPpm(this.item.neighbourhood);
+    if (!avg) return null;
+    return `Média do bairro: ${formatBrl(avg)}/m²`;
+  }
+
   onPrev(event: Event): void {
     event.preventDefault();
     event.stopPropagation();
@@ -110,10 +122,10 @@ export class ListingCardComponent {
     this.state.setGalleryExpanded(this.item.id, false);
   }
 
-  onCollapseData(event: Event): void {
+  onToggleCardData(event: Event): void {
     event.preventDefault();
     event.stopPropagation();
-    this.state.setGalleryExpanded(this.item.id, true);
+    this.state.setCardDataExpanded(this.item.id, !this.cardDataExpanded);
   }
 
   private navigatePhoto(delta: number): void {

@@ -47,6 +47,7 @@ export class ExplorerState {
   readonly pinned = signal<Set<string>>(new Set());
   readonly photoIndexById = signal<Map<string, number>>(new Map());
   readonly galleryExpandedById = signal<Map<string, boolean>>(new Map());
+  readonly cardDataExpandedById = signal<Map<string, boolean>>(new Map());
   readonly sidebarCollapsed = signal(this.readSidebarCollapsed());
 
   readonly filtered = computed(() => {
@@ -67,6 +68,27 @@ export class ExplorerState {
 
   readonly compareCount = computed(() => this.pinned().size);
   readonly compareEnabled = computed(() => this.pinned().size >= 2);
+
+  readonly neighbourhoodAvgPpmByName = computed(() => {
+    const sums: Record<string, { total: number; count: number }> = {};
+    for (const item of this.enriched()) {
+      if (!item.pricePerSqm) continue;
+      const name = item.neighbourhood || 'Sem bairro';
+      if (!sums[name]) sums[name] = { total: 0, count: 0 };
+      sums[name].total += item.pricePerSqm;
+      sums[name].count += 1;
+    }
+    const averages: Record<string, number> = {};
+    for (const [name, { total, count }] of Object.entries(sums)) {
+      averages[name] = total / count;
+    }
+    return averages;
+  });
+
+  getNeighbourhoodAvgPpm(neighbourhood?: string | null): number | null {
+    const avg = this.neighbourhoodAvgPpmByName()[neighbourhood || 'Sem bairro'];
+    return avg ?? null;
+  }
 
   async bootstrap(): Promise<void> {
     this.loading.set(true);
@@ -257,16 +279,27 @@ export class ExplorerState {
     this.galleryExpandedById.set(next);
   }
 
+  isCardDataExpanded(id: string): boolean {
+    return this.cardDataExpandedById().get(id) !== false;
+  }
+
+  setCardDataExpanded(id: string, expanded: boolean): void {
+    const next = new Map(this.cardDataExpandedById());
+    if (expanded) next.delete(id);
+    else next.set(id, false);
+    this.cardDataExpandedById.set(next);
+  }
+
   expandAllCardData(): void {
-    this.galleryExpandedById.set(new Map());
+    this.cardDataExpandedById.set(new Map());
   }
 
   collapseAllCardData(): void {
     const next = new Map<string, boolean>();
     for (const item of this.filtered()) {
-      next.set(item.id, true);
+      next.set(item.id, false);
     }
-    this.galleryExpandedById.set(next);
+    this.cardDataExpandedById.set(next);
   }
 
   neighbourhoodOptions() {

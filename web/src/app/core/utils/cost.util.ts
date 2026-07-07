@@ -37,6 +37,25 @@ export function average(values: number[]): number {
   return values.length ? values.reduce((sum, value) => sum + value, 0) / values.length : 0;
 }
 
+export type PpmTier = 'good' | 'fair' | 'high';
+
+export function getPpmTier(
+  ppm: number | null | undefined,
+  neighbourhoodAvg: number | null | undefined,
+  tolerance = 0.1,
+): PpmTier | null {
+  if (!ppm || !neighbourhoodAvg) return null;
+  const ratio = ppm / neighbourhoodAvg;
+  if (ratio <= 1 - tolerance) return 'good';
+  if (ratio >= 1 + tolerance) return 'high';
+  return 'fair';
+}
+
+export function ppmTierClass(tier: PpmTier | null): string {
+  if (!tier) return '';
+  return `ppm-${tier}`;
+}
+
 export function getCostLines(item: {
   rentPrice?: number;
   condoPrice?: number | null;

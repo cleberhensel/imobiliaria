@@ -711,15 +711,18 @@ app-listing-card {
   -webkit-backdrop-filter: none;
 }
 
-.card-data-sheet > .card-data-toggle.collapse {
-  position: absolute;
-  top: 0.45rem;
-  right: 0.45rem;
-  z-index: 3;
-}
-
 .card-glass-footer .card-data-toggle.expand {
   align-self: center;
+}
+
+.card-top-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.card.card-data-collapsed .card-data-sheet {
+  padding-bottom: 0.55rem;
 }
 
 .card.gallery-focus {
@@ -1097,6 +1100,22 @@ app-listing-card {
   font-size: 0.72rem;
   line-height: 1.25;
   color: var(--ink);
+}
+
+.info-item strong.ppm-good {
+  color: #5ecf8f;
+}
+
+.info-item strong.ppm-fair {
+  color: var(--sun);
+}
+
+.info-item strong.ppm-high {
+  color: var(--rose);
+}
+
+.info-item-ppm strong {
+  font-weight: 700;
 }
 
 .cost-grid {

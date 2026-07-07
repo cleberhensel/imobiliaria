@@ -3,6 +3,7 @@
   [class.adherence-high]="item.matchesAllPriorities"
   [class.adherence-partial]="!item.matchesAllPriorities && (item.matchedCount || 0) > 0"
   [class.gallery-focus]="galleryExpanded"
+  [class.card-data-collapsed]="!cardDataExpanded"
   [attr.data-listing-id]="item.id"
 >
   <div class="card-media">
@@ -29,17 +30,6 @@
   </div>
 
   <div class="card-data-sheet glass-panel">
-    <button
-      type="button"
-      class="card-data-toggle collapse glass-control"
-      (click)="onCollapseData($event)"
-      aria-label="Retrair dados"
-      title="Retrair"
-    >
-      <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
-        <path d="M8 10l4 4 4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-      </svg>
-    </button>
     <div class="card-body-full">
       <div class="card-top">
         <div class="card-top-copy">
@@ -51,49 +41,76 @@
         </div>
         <div class="card-top-aside">
           <strong class="card-price">{{ formatMoney(item.totalCost) }}</strong>
-          <button type="button" class="card-detail-btn" (click)="openDetail.emit(item.id)">Detalhes</button>
-        </div>
-      </div>
-      <div class="card-body-grid">
-        <div class="card-info">
-          <div class="info-grid">
-            <div class="info-item"><span>Bairro</span><strong>{{ item.neighbourhood || 'Sem bairro' }}</strong></div>
-            <div class="info-item"><span>Quartos</span><strong>{{ item.bedrooms || '—' }}</strong></div>
-            <div class="info-item"><span>Área</span><strong>{{ item.area ? item.area + ' m²' : '—' }}</strong></div>
-            <div class="info-item"><span>R$/m²</span><strong>{{ item.pricePerSqm ? formatMoney(item.pricePerSqm) : '—' }}</strong></div>
-            <div class="info-item"><span>Vagas</span><strong>{{ item.parkingSpots || '—' }}</strong></div>
-            <div class="info-item"><span>Fonte</span><strong>{{ item.sourceLabel || item.source }}</strong></div>
+          <div class="card-top-actions">
+            <button type="button" class="card-detail-btn" (click)="openDetail.emit(item.id)">Detalhes</button>
+            <button
+              type="button"
+              class="card-data-toggle glass-control"
+              (click)="onToggleCardData($event)"
+              [attr.aria-label]="cardDataExpanded ? 'Retrair dados' : 'Expandir dados'"
+              [attr.title]="cardDataExpanded ? 'Retrair' : 'Expandir'"
+            >
+              @if (cardDataExpanded) {
+                <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
+                  <path d="M8 10l4 4 4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              } @else {
+                <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
+                  <path d="M8 14l4-4 4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              }
+            </button>
           </div>
         </div>
-        <div class="card-costs">
-          <p class="costs-title">Custos mensais</p>
-          <div class="cost-grid">
-            @for (line of costLines(); track line.label) {
-              <div class="cost-row" [class.total]="line.total" [class.extra]="line.extra" [class.muted]="line.muted">
-                <span class="cost-label">{{ line.label }}</span>
-                <strong class="cost-value">{{ formatMoney(line.amount) }}</strong>
+      </div>
+      @if (cardDataExpanded) {
+        <div class="card-body-grid">
+          <div class="card-info">
+            <div class="info-grid">
+              <div class="info-item info-item-ppm">
+                <span>R$/m²</span>
+                <strong [class]="ppmTierClass()" [attr.title]="ppmTierTitle()">{{ item.pricePerSqm ? formatMoney(item.pricePerSqm) : '—' }}</strong>
               </div>
+              <div class="info-item">
+                <span>Bairro</span>
+                <strong>{{ item.neighbourhood || 'Sem bairro' }}</strong>
+              </div>
+              <div class="info-item"><span>Quartos</span><strong>{{ item.bedrooms || '—' }}</strong></div>
+              <div class="info-item"><span>Área</span><strong>{{ item.area ? item.area + ' m²' : '—' }}</strong></div>
+              <div class="info-item"><span>Vagas</span><strong>{{ item.parkingSpots || '—' }}</strong></div>
+              <div class="info-item"><span>Fonte</span><strong>{{ item.sourceLabel || item.source }}</strong></div>
+            </div>
+          </div>
+          <div class="card-costs">
+            <p class="costs-title">Custos mensais</p>
+            <div class="cost-grid">
+              @for (line of costLines(); track line.label) {
+                <div class="cost-row" [class.total]="line.total" [class.extra]="line.extra" [class.muted]="line.muted">
+                  <span class="cost-label">{{ line.label }}</span>
+                  <strong class="cost-value">{{ formatMoney(line.amount) }}</strong>
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+        <div class="card-meta-row">
+          <div class="priority-matches">
+            @for (match of priorityMatches(); track match.key) {
+              <span class="priority-match" [class.on]="match.on" [class.off]="!match.on">{{ match.label }}</span>
             }
           </div>
+          <div class="tag-row">
+            <span class="tag core">{{ item.tierLabel }}</span>
+            @if (item.signals.sacada) { <span class="tag balcony">Sacada</span> }
+            @if (item.signals.sun) {
+              <span class="tag sun">{{ item.signals.sunStrong ? 'Sol confirmado' : 'Sol provável' }}</span>
+            }
+            @if (item.acceptsPets) { <span class="tag">Pets</span> }
+            @if (item.parkingSpots > 0) { <span class="tag">{{ item.parkingSpots }} vaga(s)</span> }
+            <span class="tag">{{ item.sourceLabel || item.source }}</span>
+          </div>
         </div>
-      </div>
-      <div class="card-meta-row">
-        <div class="priority-matches">
-          @for (match of priorityMatches(); track match.key) {
-            <span class="priority-match" [class.on]="match.on" [class.off]="!match.on">{{ match.label }}</span>
-          }
-        </div>
-        <div class="tag-row">
-          <span class="tag core">{{ item.tierLabel }}</span>
-          @if (item.signals.sacada) { <span class="tag balcony">Sacada</span> }
-          @if (item.signals.sun) {
-            <span class="tag sun">{{ item.signals.sunStrong ? 'Sol confirmado' : 'Sol provável' }}</span>
-          }
-          @if (item.acceptsPets) { <span class="tag">Pets</span> }
-          @if (item.parkingSpots > 0) { <span class="tag">{{ item.parkingSpots }} vaga(s)</span> }
-          <span class="tag">{{ item.sourceLabel || item.source }}</span>
-        </div>
-      </div>
+      }
     </div>
   </div>
 
@@ -107,8 +124,8 @@
       type="button"
       class="card-data-toggle expand glass-control"
       (click)="onGalleryBack($event)"
-      aria-label="Expandir dados"
-      title="Expandir"
+      aria-label="Voltar aos dados do card"
+      title="Voltar"
     >
       <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
         <path d="M8 14l4-4 4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
