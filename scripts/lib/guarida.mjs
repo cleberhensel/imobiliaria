@@ -1,6 +1,6 @@
 const SEARCH_URL = 'https://guarida.com.br/busca/alugar/residencial/porto-alegre-rs';
 const API_URL = 'https://guarida.com.br/api/busca';
-const USER_AGENT = 'Mozilla/5.0 (compatible; imoveis-analyzer/0.1)';
+const USER_AGENT = 'Mozilla/5.0 (compatible; imoveis-analyzer/0.2)';
 
 const BASE_PAYLOAD = {
   localizacao: 'porto-alegre-rs',
@@ -11,6 +11,8 @@ const BASE_PAYLOAD = {
   longitude: '0',
   cidade: 'porto-alegre-rs',
 };
+
+import { inCostRange, jitteredDelay, withRetry } from './crawler-io.mjs';
 
 /**
  * @param {string} html
@@ -38,22 +40,28 @@ export function parseSearchPage(html) {
  * @param {Record<string, unknown>} overrides
  */
 export async function fetchSearchApi(overrides = {}) {
-  const response = await fetch(API_URL, {
-    method: 'POST',
-    headers: {
-      Accept: 'application/json',
-      'Content-Type': 'application/json',
-      'User-Agent': USER_AGENT,
-      Referer: SEARCH_URL,
-    },
-    body: JSON.stringify({ ...BASE_PAYLOAD, ...overrides }),
+  return withRetry(async () => {
+    const response = await fetch(API_URL, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'User-Agent': USER_AGENT,
+        Referer: SEARCH_URL,
+      },
+      body: JSON.stringify({ ...BASE_PAYLOAD, ...overrides }),
+    });
+
+    if (!response.ok) {
+      const error = new Error(`Falha na API Guarida: HTTP ${response.status}`);
+      error.status = response.status;
+      throw error;
+    }
+
+    return response.json();
+  }, {
+    shouldRetry: (error) => error.status === 429 || (error.status >= 500),
   });
-
-  if (!response.ok) {
-    throw new Error(`Falha na API Guarida: HTTP ${response.status}`);
-  }
-
-  return response.json();
 }
 
 /**
@@ -61,34 +69,62 @@ export async function fetchSearchApi(overrides = {}) {
  */
 export async function fetchSearchPage(page = 1) {
   if (page === 1) {
-    const response = await fetch(SEARCH_URL, {
-      headers: {
-        Accept: 'text/html',
-        'User-Agent': USER_AGENT,
-      },
+    return withRetry(async () => {
+      const response = await fetch(SEARCH_URL, {
+        headers: {
+          Accept: 'text/html',
+          'User-Agent': USER_AGENT,
+        },
+      });
+
+      if (!response.ok) {
+        const error = new Error(`Falha ao buscar página ${page}: HTTP ${response.status}`);
+        error.status = response.status;
+        throw error;
+      }
+
+      return response.text();
+    }, {
+      shouldRetry: (error) => error.status === 429 || (error.status >= 500),
     });
-
-    if (!response.ok) {
-      throw new Error(`Falha ao buscar página ${page}: HTTP ${response.status}`);
-    }
-
-    return response.text();
   }
 
   return fetchSearchApi({ pagina: page });
 }
 
 /**
- * @param {object} options
- * @param {number} options.maxTotalCost
- * @param {number|null} [options.maxListings]
- * @param {(page: number, total: number, collected: number) => void} [options.onProgress]
+ * @param {string|number|null|undefined} value
  */
-export async function collectGuarida({ maxTotalCost, maxListings = null, onProgress }) {
-  const houses = new Map();
-  let reportedTotal = 0;
-  let totalPages = 1;
-  let page = 1;
+export function parseMoney(value) {
+  if (typeof value === 'number') return value;
+  if (!value) return 0;
+  return Number(String(value).replace(/\D/g, '')) || 0;
+}
+
+/**
+ * @param {object} options
+ * @param {object} options.config
+ * @param {object|null} [options.checkpoint]
+ * @param {Set<string>} options.seenIds
+ * @param {(listing: object) => Promise<boolean>} options.onListing
+ * @param {(progress: object) => Promise<void>} [options.onProgress]
+ */
+export async function collectGuarida({
+  config,
+  checkpoint,
+  seenIds,
+  onListing,
+  onProgress,
+}) {
+  const { minTotalCost, maxTotalCost } = config;
+  const sourceConfig = config.sources?.guarida || {};
+  const maxListings = sourceConfig.maxListings ?? null;
+
+  let reportedTotal = checkpoint?.reportedTotal ?? 0;
+  let totalPages = checkpoint?.totalPages ?? 1;
+  let page = checkpoint?.page ?? 1;
+  let collected = seenIds.size;
+  let emptyStreak = checkpoint?.emptyStreak ?? 0;
 
   while (page <= totalPages) {
     let listings = [];
@@ -105,7 +141,7 @@ export async function collectGuarida({ maxTotalCost, maxListings = null, onProgr
       pagination = result.paginacao || null;
     }
 
-    if (page === 1 && pagination) {
+    if (page === 1 && pagination && !checkpoint?.reportedTotal) {
       reportedTotal = pagination.total || 0;
       totalPages = pagination.paginas || 1;
     }
@@ -115,44 +151,47 @@ export async function collectGuarida({ maxTotalCost, maxListings = null, onProgr
       if (!item?.codigo) continue;
 
       const totalCost = parseMoney(item.valores?.total);
-      if (!totalCost || totalCost > maxTotalCost) continue;
+      if (!totalCost || !inCostRange(totalCost, minTotalCost, maxTotalCost)) continue;
 
       const id = String(item.codigo);
-      if (houses.has(id)) continue;
-      houses.set(id, item);
-      added += 1;
+      if (seenIds.has(id)) continue;
 
-      if (maxListings && houses.size >= maxListings) break;
+      const accepted = await onListing(item);
+      if (accepted) {
+        added += 1;
+        collected += 1;
+      }
+
+      if (maxListings && collected >= maxListings) break;
     }
 
-    onProgress?.(page, reportedTotal, houses.size);
+    emptyStreak = added ? 0 : emptyStreak + 1;
 
-    if (maxListings && houses.size >= maxListings) break;
+    await onProgress?.({
+      page,
+      reportedTotal,
+      collected,
+      checkpoint: {
+        page: page + 1,
+        reportedTotal,
+        totalPages,
+        emptyStreak,
+        pagesFetched: page,
+      },
+    });
+
+    if (maxListings && collected >= maxListings) break;
     if (!listings.length) break;
-    if (!pagination?.temProxima) break;
-    if (!added && page > 3) break;
+    if (pagination && page > 1 && !pagination.temProxima) break;
+    if (emptyStreak >= 3 && page > 3) break;
 
     page += 1;
-    await sleep(300);
+    await jitteredDelay(300, 300);
   }
 
   return {
     reportedTotal,
     pagesFetched: page,
-    rawCount: houses.size,
-    houses: [...houses.values()],
+    rawCount: collected,
   };
-}
-
-/**
- * @param {string|number|null|undefined} value
- */
-export function parseMoney(value) {
-  if (typeof value === 'number') return value;
-  if (!value) return 0;
-  return Number(String(value).replace(/\D/g, '')) || 0;
-}
-
-function sleep(ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
 }

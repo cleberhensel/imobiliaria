@@ -1,0 +1,66 @@
+.loading-screen {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  color: var(--ink);
+}
+
+.loading-screen.error {
+  color: var(--rose);
+}
+
+.pagination {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  margin: 1.5rem 0 2rem;
+}
+
+.search-input,
+.sort-select {
+  width: 100%;
+  margin-bottom: 0.75rem;
+  padding: 0.55rem 0.75rem;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  color: var(--ink);
+}
+
+.neighbourhood-list {
+  max-height: 220px;
+  overflow: auto;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.hint {
+  color: var(--muted);
+  font-size: 0.82rem;
+}
+
+.detail-dialog,
+.compare-dialog {
+  position: fixed;
+  inset: 50% auto auto 50%;
+  transform: translate(-50%, -50%);
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  background: var(--surface);
+  color: var(--ink);
+  padding: 1rem;
+  max-width: min(980px, 92vw);
+  width: 100%;
+}
+
+.compare-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.dialog-close {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+}

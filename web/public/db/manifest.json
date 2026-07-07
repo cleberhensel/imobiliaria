@@ -1,0 +1,108 @@
+{
+  "version": "2.0",
+  "city": "Porto Alegre",
+  "state": "RS",
+  "filter": {
+    "minTotalCost": 1500,
+    "maxTotalCost": 5000
+  },
+  "collectedAt": "2026-07-07T16:15:08.020Z",
+  "count": 2750,
+  "sources": [
+    {
+      "id": "quintoandar",
+      "label": "QuintoAndar",
+      "count": 958
+    },
+    {
+      "id": "auxiliadora-predial",
+      "label": "Auxiliadora Predial",
+      "count": 984
+    },
+    {
+      "id": "guarida",
+      "label": "Guarida",
+      "count": 808
+    }
+  ],
+  "shards": {
+    "lite": {
+      "size": 128,
+      "count": 22,
+      "files": [
+        "lite/shard-000.json",
+        "lite/shard-001.json",
+        "lite/shard-002.json",
+        "lite/shard-003.json",
+        "lite/shard-004.json",
+        "lite/shard-005.json",
+        "lite/shard-006.json",
+        "lite/shard-007.json",
+        "lite/shard-008.json",
+        "lite/shard-009.json",
+        "lite/shard-010.json",
+        "lite/shard-011.json",
+        "lite/shard-012.json",
+        "lite/shard-013.json",
+        "lite/shard-014.json",
+        "lite/shard-015.json",
+        "lite/shard-016.json",
+        "lite/shard-017.json",
+        "lite/shard-018.json",
+        "lite/shard-019.json",
+        "lite/shard-020.json",
+        "lite/shard-021.json"
+      ]
+    },
+    "detail": {
+      "size": 64,
+      "count": 43,
+      "files": [
+        "detail/shard-000.json",
+        "detail/shard-001.json",
+        "detail/shard-002.json",
+        "detail/shard-003.json",
+        "detail/shard-004.json",
+        "detail/shard-005.json",
+        "detail/shard-006.json",
+        "detail/shard-007.json",
+        "detail/shard-008.json",
+        "detail/shard-009.json",
+        "detail/shard-010.json",
+        "detail/shard-011.json",
+        "detail/shard-012.json",
+        "detail/shard-013.json",
+        "detail/shard-014.json",
+        "detail/shard-015.json",
+        "detail/shard-016.json",
+        "detail/shard-017.json",
+        "detail/shard-018.json",
+        "detail/shard-019.json",
+        "detail/shard-020.json",
+        "detail/shard-021.json",
+        "detail/shard-022.json",
+        "detail/shard-023.json",
+        "detail/shard-024.json",
+        "detail/shard-025.json",
+        "detail/shard-026.json",
+        "detail/shard-027.json",
+        "detail/shard-028.json",
+        "detail/shard-029.json",
+        "detail/shard-030.json",
+        "detail/shard-031.json",
+        "detail/shard-032.json",
+        "detail/shard-033.json",
+        "detail/shard-034.json",
+        "detail/shard-035.json",
+        "detail/shard-036.json",
+        "detail/shard-037.json",
+        "detail/shard-038.json",
+        "detail/shard-039.json",
+        "detail/shard-040.json",
+        "detail/shard-041.json",
+        "detail/shard-042.json"
+      ]
+    }
+  },
+  "buildHash": "a5c760119a05"
+}

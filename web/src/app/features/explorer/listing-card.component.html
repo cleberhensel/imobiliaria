@@ -1,0 +1,97 @@
+<article
+  class="card"
+  [class.adherence-high]="item.matchesAllPriorities"
+  [class.adherence-partial]="!item.matchesAllPriorities && (item.matchedCount || 0) > 0"
+  [class.gallery-focus]="galleryExpanded"
+  [attr.data-listing-id]="item.id"
+>
+  <div class="card-media">
+    <div class="card-gallery">
+      <div class="gallery-stage">
+        @if (currentPhoto) {
+          <img class="gallery-image" [src]="currentPhoto" alt="" loading="lazy" />
+        } @else {
+          <div class="placeholder">Sem foto</div>
+        }
+      </div>
+    </div>
+  </div>
+
+  <div class="card-image-zone">
+    <div class="card-score glass-control" [class]="scoreClass">{{ score }}% aderência</div>
+    @if (hasNav) {
+      <div class="gallery-controls">
+        <button type="button" class="gallery-nav prev glass-control" (click)="onPrev($event)" aria-label="Foto anterior">‹</button>
+        <button type="button" class="gallery-nav next glass-control" (click)="onNext($event)" aria-label="Próxima foto">›</button>
+        <span class="gallery-counter glass-control">{{ photoIndex + 1 }}/{{ photos.length }}</span>
+      </div>
+    }
+  </div>
+
+  <div class="card-data-sheet glass-panel">
+    <div class="card-body-full">
+      <div class="card-top">
+        <div class="card-top-copy">
+          <h3 class="card-address">
+            <a [href]="item.url" target="_blank" rel="noopener noreferrer">{{ formatLogradouro() }}</a>
+          </h3>
+          <p class="card-neighbourhood">{{ item.neighbourhood || 'Sem bairro' }}</p>
+          <p class="card-listing-title">{{ displayTitle() }}</p>
+        </div>
+        <div class="card-top-aside">
+          <strong class="card-price">{{ formatMoney(item.totalCost) }}</strong>
+          <button type="button" class="card-detail-btn" (click)="openDetail.emit(item.id)">Detalhes</button>
+        </div>
+      </div>
+      <div class="card-body-grid">
+        <div class="card-info">
+          <div class="info-grid">
+            <div class="info-item"><span>Bairro</span><strong>{{ item.neighbourhood || 'Sem bairro' }}</strong></div>
+            <div class="info-item"><span>Quartos</span><strong>{{ item.bedrooms || '—' }}</strong></div>
+            <div class="info-item"><span>Área</span><strong>{{ item.area ? item.area + ' m²' : '—' }}</strong></div>
+            <div class="info-item"><span>R$/m²</span><strong>{{ item.pricePerSqm ? formatMoney(item.pricePerSqm) : '—' }}</strong></div>
+            <div class="info-item"><span>Vagas</span><strong>{{ item.parkingSpots || '—' }}</strong></div>
+            <div class="info-item"><span>Fonte</span><strong>{{ item.sourceLabel || item.source }}</strong></div>
+          </div>
+        </div>
+        <div class="card-costs">
+          <p class="costs-title">Custos mensais</p>
+          <div class="cost-grid">
+            @for (line of costLines(); track line.label) {
+              <div class="cost-row" [class.total]="line.total" [class.extra]="line.extra" [class.muted]="line.muted">
+                <span class="cost-label">{{ line.label }}</span>
+                <strong class="cost-value">{{ formatMoney(line.amount) }}</strong>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+      <div class="card-meta-row">
+        <div class="priority-matches">
+          @for (match of priorityMatches(); track match.key) {
+            <span class="priority-match" [class.on]="match.on" [class.off]="!match.on">{{ match.label }}</span>
+          }
+        </div>
+        <div class="tag-row">
+          <span class="tag core">{{ item.tierLabel }}</span>
+          @if (item.signals.sacada) { <span class="tag balcony">Sacada</span> }
+          @if (item.signals.sun) {
+            <span class="tag sun">{{ item.signals.sunStrong ? 'Sol confirmado' : 'Sol provável' }}</span>
+          }
+          @if (item.acceptsPets) { <span class="tag">Pets</span> }
+          @if (item.parkingSpots > 0) { <span class="tag">{{ item.parkingSpots }} vaga(s)</span> }
+          <span class="tag">{{ item.sourceLabel || item.source }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-glass-footer glass-panel" [hidden]="!galleryExpanded">
+    <button type="button" class="compact-detail-trigger" (click)="openDetail.emit(item.id)">
+      <span class="compact-address">{{ formatLogradouro() }}</span>
+      <span class="compact-neighbourhood">{{ item.neighbourhood || 'Sem bairro' }}</span>
+      <strong class="compact-total">{{ formatMoney(item.totalCost) }}</strong>
+    </button>
+    <button type="button" class="gallery-close glass-control" (click)="onGalleryBack($event)" aria-label="Voltar aos dados completos" title="Voltar aos dados">✕</button>
+  </div>
+</article>

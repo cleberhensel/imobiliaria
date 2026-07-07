@@ -1,5 +1,5 @@
 const API_BASE = 'https://apigw.prod.quintoandar.com.br/house-listing-search';
-const USER_AGENT = 'Mozilla/5.0 (compatible; imoveis-analyzer/0.1)';
+const USER_AGENT = 'Mozilla/5.0 (compatible; imoveis-analyzer/0.2)';
 
 const FIELDS = [
   'id', 'coverImage', 'imageList', 'rent', 'totalCost', 'salePrice', 'iptuPlusCondominium',
@@ -20,12 +20,14 @@ const PORTO_ALEGRE_CENTER = {
   lng: -51.2089887,
 };
 
+import { jitteredDelay, withRetry } from './crawler-io.mjs';
+
 /**
  * @param {string} path
  * @param {object} body
  */
-async function postSearch(path, body, retries = 3) {
-  for (let attempt = 1; attempt <= retries; attempt += 1) {
+async function postSearch(path, body) {
+  return withRetry(async () => {
     const response = await fetch(`${API_BASE}${path}`, {
       method: 'POST',
       headers: {
@@ -41,21 +43,20 @@ async function postSearch(path, body, retries = 3) {
     }
 
     const text = await response.text();
-    if (attempt === retries || response.status < 500) {
-      throw new Error(`API ${path} falhou: HTTP ${response.status} — ${text.slice(0, 200)}`);
-    }
-
-    await sleep(500 * attempt);
-  }
-
-  throw new Error(`API ${path} falhou após ${retries} tentativas`);
+    const error = new Error(`API ${path} falhou: HTTP ${response.status} — ${text.slice(0, 200)}`);
+    error.status = response.status;
+    throw error;
+  }, {
+    shouldRetry: (error) => error.status === 429 || (error.status >= 500),
+  });
 }
 
 /**
+ * @param {number} minTotalCost
  * @param {number} maxTotalCost
  * @param {string[]} blocklist
  */
-function buildFilters(maxTotalCost, blocklist) {
+function buildFilters(minTotalCost, maxTotalCost, blocklist) {
   return {
     businessContext: 'RENT',
     blocklist,
@@ -70,7 +71,7 @@ function buildFilters(maxTotalCost, blocklist) {
       lng: PORTO_ALEGRE_CENTER.lng,
       viewport: PORTO_ALEGRE_VIEWPORT,
     },
-    priceRange: [{ min: 0, max: maxTotalCost, costType: 'TOTAL_COST' }],
+    priceRange: [{ min: minTotalCost, max: maxTotalCost, costType: 'TOTAL_COST' }],
     houseSpecs: {
       area: { range: { min: 0, max: 10000 } },
       houseTypes: ['APARTMENT', 'HOUSE', 'HOUSE_CONDO', 'STUDIO'],
@@ -85,9 +86,10 @@ function buildFilters(maxTotalCost, blocklist) {
 }
 
 /**
+ * @param {number} minTotalCost
  * @param {number} maxTotalCost
  */
-export async function countQuintoAndar(maxTotalCost) {
+export async function countQuintoAndar(minTotalCost, maxTotalCost) {
   const data = await postSearch('/v3/search/count', {
     context: {
       mapShowing: false,
@@ -96,7 +98,7 @@ export async function countQuintoAndar(maxTotalCost) {
       deviceId: 'imoveis-analyzer',
     },
     filters: {
-      ...buildFilters(maxTotalCost, []),
+      ...buildFilters(minTotalCost, maxTotalCost, []),
       pagination: { pageSize: 20, offset: 0 },
     },
   });
@@ -131,31 +133,43 @@ async function hydrateHouses(ids) {
 
 /**
  * @param {object} options
- * @param {number} options.maxTotalCost
- * @param {number|null} [options.maxListings]
- * @param {(page: number, total: number, collected: number) => void} [options.onProgress]
+ * @param {object} options.config
+ * @param {object|null} [options.checkpoint]
+ * @param {Set<string>} options.seenIds
+ * @param {(listing: object) => Promise<boolean>} options.onListing
+ * @param {(progress: object) => Promise<void>} [options.onProgress]
  */
-export async function collectQuintoAndar({ maxTotalCost, maxListings = null, onProgress }) {
-  const reportedTotal = await countQuintoAndar(maxTotalCost);
+export async function collectQuintoAndar({
+  config,
+  checkpoint,
+  seenIds,
+  onListing,
+  onProgress,
+}) {
+  const { minTotalCost, maxTotalCost } = config;
+  const sourceConfig = config.sources?.quintoandar || {};
+  const maxListings = sourceConfig.maxListings ?? null;
+
+  const reportedTotal = checkpoint?.reportedTotal ?? await countQuintoAndar(minTotalCost, maxTotalCost);
   const targetTotal = maxListings ? Math.min(maxListings, reportedTotal) : reportedTotal;
 
-  let context = {
+  let context = checkpoint?.context || {
     mapShowing: false,
     listShowing: true,
     userId: null,
     deviceId: 'imoveis-analyzer',
   };
 
-  const houses = new Map();
-  const blocklist = [];
+  const blocklist = [...(checkpoint?.blocklist || [])];
   const pageSize = 20;
-  let page = 0;
+  let page = checkpoint?.page ?? 0;
+  let collected = seenIds.size;
 
-  while (houses.size < targetTotal) {
+  while (collected < targetTotal) {
     const listData = await postSearch('/v2/search/list', {
       context,
       filters: {
-        ...buildFilters(maxTotalCost, blocklist),
+        ...buildFilters(minTotalCost, maxTotalCost, blocklist),
         pagination: {
           page,
           pageSize,
@@ -174,7 +188,7 @@ export async function collectQuintoAndar({ maxTotalCost, maxListings = null, onP
 
     const newIds = hits
       .map((hit) => String(hit._id))
-      .filter((id) => id && !houses.has(id));
+      .filter((id) => id && !seenIds.has(id) && !blocklist.includes(id));
 
     if (!newIds.length) break;
 
@@ -185,25 +199,35 @@ export async function collectQuintoAndar({ maxTotalCost, maxListings = null, onP
       blocklist.push(id);
       const house = hydratedById.get(id);
       if (!house) continue;
-      if (Number(house.totalCost) > maxTotalCost) continue;
-      houses.set(id, house);
-      if (houses.size >= targetTotal) break;
+
+      const totalCost = Number(house.totalCost) || 0;
+      if (totalCost < minTotalCost || totalCost > maxTotalCost) continue;
+
+      const accepted = await onListing(house);
+      if (accepted) collected += 1;
+      if (collected >= targetTotal) break;
     }
 
-    onProgress?.(page + 1, reportedTotal, houses.size);
-
     page += 1;
-    await sleep(250);
+    await onProgress?.({
+      page,
+      reportedTotal,
+      collected,
+      checkpoint: {
+        page,
+        reportedTotal,
+        blocklist,
+        context,
+        pagesFetched: page,
+      },
+    });
+
+    await jitteredDelay(250, 350);
   }
 
   return {
     reportedTotal,
     pagesFetched: page,
-    rawCount: houses.size,
-    houses: [...houses.values()],
+    rawCount: collected,
   };
-}
-
-function sleep(ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
 }

@@ -1,16 +1,14 @@
 {
   "city": "Porto Alegre",
   "state": "RS",
-  "maxTotalCost": 4500,
+  "minTotalCost": 1500,
+  "maxTotalCost": 5000,
+  "defaults": {
+    "maxListingsPerSource": 1000
+  },
   "sources": {
-    "quintoandar": {
-      "maxListings": 300
-    },
-    "auxiliadora-predial": {
-      "maxListings": 300
-    },
-    "guarida": {
-      "maxListings": 300
-    }
+    "quintoandar": {},
+    "auxiliadora-predial": {},
+    "guarida": {}
   }
 }

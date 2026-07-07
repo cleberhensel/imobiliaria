@@ -1,0 +1,22 @@
+{
+  "source": "quintoandar",
+  "city": "Porto Alegre",
+  "state": "RS",
+  "filter": {
+    "minTotalCost": 1500,
+    "maxTotalCost": 5000
+  },
+  "startedAt": "2026-07-07T16:09:35.309Z",
+  "resumed": false,
+  "reportedTotal": 3425,
+  "pagesFetched": 156,
+  "collected": 1000,
+  "discarded": {
+    "city": 0,
+    "cost": 0,
+    "duplicate": 0
+  },
+  "errors": [],
+  "finishedAt": "2026-07-07T16:12:41.587Z",
+  "completed": true
+}
