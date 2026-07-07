@@ -964,50 +964,85 @@ app-listing-card {
   position: absolute;
   top: 0;
   bottom: 0;
-  width: 30px;
+  width: 60px;
   height: 100%;
   margin: 0;
   padding: 0;
   border: none;
   border-radius: 0;
-  color: rgba(255, 255, 255, 0.38);
-  font-size: 1.35rem;
+  color: rgba(255, 255, 255, 0.42);
+  font-size: 1.4rem;
   line-height: 1;
   cursor: pointer;
   display: grid;
   place-items: center;
   pointer-events: auto;
-  background: transparent;
-  box-shadow: none;
-  backdrop-filter: none;
-  -webkit-backdrop-filter: none;
+  backdrop-filter: blur(8px) saturate(120%);
+  -webkit-backdrop-filter: blur(8px) saturate(120%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
   transition:
-    color 0.18s ease,
-    background 0.18s ease;
+    color 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease,
+    backdrop-filter 0.2s ease;
 }
 
 .gallery-nav.prev {
   left: 0;
   border-radius: 22px 0 0 22px;
-  background: linear-gradient(to right, rgba(8, 10, 16, 0.28), rgba(8, 10, 16, 0));
+  border-right: 1px solid rgba(255, 255, 255, 0.05);
+  background: linear-gradient(
+    to right,
+    rgba(15, 18, 24, 0.22),
+    rgba(15, 18, 24, 0.06) 55%,
+    rgba(15, 18, 24, 0)
+  );
 }
 
 .gallery-nav.next {
   right: 0;
   border-radius: 0 22px 22px 0;
-  background: linear-gradient(to left, rgba(8, 10, 16, 0.28), rgba(8, 10, 16, 0));
+  border-left: 1px solid rgba(255, 255, 255, 0.05);
+  background: linear-gradient(
+    to left,
+    rgba(15, 18, 24, 0.22),
+    rgba(15, 18, 24, 0.06) 55%,
+    rgba(15, 18, 24, 0)
+  );
 }
 
 .gallery-nav.prev:hover,
 .gallery-nav.prev:focus-visible {
-  color: rgba(255, 255, 255, 0.96);
-  background: linear-gradient(to right, rgba(8, 10, 16, 0.62), rgba(8, 10, 16, 0.12));
+  color: rgba(255, 255, 255, 0.95);
+  border-right-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px) saturate(135%);
+  -webkit-backdrop-filter: blur(12px) saturate(135%);
+  background: linear-gradient(
+    to right,
+    rgba(15, 18, 24, 0.48),
+    rgba(15, 18, 24, 0.18) 55%,
+    rgba(15, 18, 24, 0.04)
+  );
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    inset -8px 0 18px rgba(0, 0, 0, 0.08);
 }
 
 .gallery-nav.next:hover,
 .gallery-nav.next:focus-visible {
-  color: rgba(255, 255, 255, 0.96);
-  background: linear-gradient(to left, rgba(8, 10, 16, 0.62), rgba(8, 10, 16, 0.12));
+  color: rgba(255, 255, 255, 0.95);
+  border-left-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px) saturate(135%);
+  -webkit-backdrop-filter: blur(12px) saturate(135%);
+  background: linear-gradient(
+    to left,
+    rgba(15, 18, 24, 0.48),
+    rgba(15, 18, 24, 0.18) 55%,
+    rgba(15, 18, 24, 0.04)
+  );
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    inset 8px 0 18px rgba(0, 0, 0, 0.08);
 }
 
 .gallery-nav:focus-visible {
