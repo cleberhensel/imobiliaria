@@ -1,0 +1,1 @@
+Silêncio é um projeto que busca criar uma comunidade de pessoas que buscam silêncio e tranquilidade.
