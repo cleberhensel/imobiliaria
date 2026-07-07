@@ -257,6 +257,18 @@ export class ExplorerState {
     this.galleryExpandedById.set(next);
   }
 
+  expandAllCardData(): void {
+    this.galleryExpandedById.set(new Map());
+  }
+
+  collapseAllCardData(): void {
+    const next = new Map<string, boolean>();
+    for (const item of this.filtered()) {
+      next.set(item.id, true);
+    }
+    this.galleryExpandedById.set(next);
+  }
+
   neighbourhoodOptions() {
     const counts: Record<string, number> = {};
     for (const item of this.enriched()) {

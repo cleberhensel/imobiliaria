@@ -110,6 +110,12 @@ export class ListingCardComponent {
     this.state.setGalleryExpanded(this.item.id, false);
   }
 
+  onCollapseData(event: Event): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.state.setGalleryExpanded(this.item.id, true);
+  }
+
   private navigatePhoto(delta: number): void {
     const photos = this.photos;
     if (!photos.length) return;

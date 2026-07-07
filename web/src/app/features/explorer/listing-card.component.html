@@ -29,6 +29,17 @@
   </div>
 
   <div class="card-data-sheet glass-panel">
+    <button
+      type="button"
+      class="card-data-toggle collapse glass-control"
+      (click)="onCollapseData($event)"
+      aria-label="Retrair dados"
+      title="Retrair"
+    >
+      <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
+        <path d="M8 10l4 4 4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
     <div class="card-body-full">
       <div class="card-top">
         <div class="card-top-copy">
@@ -92,6 +103,16 @@
       <span class="compact-neighbourhood">{{ item.neighbourhood || 'Sem bairro' }}</span>
       <strong class="compact-total">{{ formatMoney(item.totalCost) }}</strong>
     </button>
-    <button type="button" class="gallery-close glass-control" (click)="onGalleryBack($event)" aria-label="Voltar aos dados completos" title="Voltar aos dados">✕</button>
+    <button
+      type="button"
+      class="card-data-toggle expand glass-control"
+      (click)="onGalleryBack($event)"
+      aria-label="Expandir dados"
+      title="Expandir"
+    >
+      <svg viewBox="0 0 24 24" width="14" height="14" aria-hidden="true">
+        <path d="M8 14l4-4 4 4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </button>
   </div>
 </article>
