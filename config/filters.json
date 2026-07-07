@@ -1,0 +1,16 @@
+{
+  "city": "Porto Alegre",
+  "state": "RS",
+  "maxTotalCost": 4500,
+  "sources": {
+    "quintoandar": {
+      "maxListings": 300
+    },
+    "auxiliadora-predial": {
+      "maxListings": 300
+    },
+    "guarida": {
+      "maxListings": 300
+    }
+  }
+}

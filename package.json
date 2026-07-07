@@ -1,0 +1,14 @@
+{
+  "name": "imoveis-analyzer",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "fetch:quintoandar": "node scripts/fetch-quintoandar.mjs",
+    "fetch:auxiliadora": "node scripts/fetch-auxiliadora-predial.mjs",
+    "fetch:guarida": "node scripts/fetch-guarida.mjs",
+    "fetch:all": "node scripts/fetch-all.mjs",
+    "merge:catalogs": "node scripts/merge-catalogs.mjs",
+    "serve": "node scripts/serve.mjs"
+  }
+}

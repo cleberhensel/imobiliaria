@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Explorador · Centro, Sacada & Sol</title>
+  <link rel="stylesheet" href="explorer.css" />
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <p class="eyebrow">Visualização ampliada</p>
+        <h1>Luz &amp; Centro</h1>
+        <p class="subtitle">Apartamentos centrais com sacada e sol · POA até R$ 4.500</p>
+        <a class="link-back" href="index.html">← Comparar com visão tabela</a>
+      </div>
+
+      <section class="sidebar-block">
+        <h2>Perfil de busca</h2>
+        <div class="preset-row">
+          <button type="button" class="preset active" data-preset="focus">Foco total</button>
+          <button type="button" class="preset" data-preset="relaxed">Ampliado</button>
+          <button type="button" class="preset" data-preset="custom">Personalizado</button>
+        </div>
+      </section>
+
+      <section class="sidebar-block">
+        <h2>Centralidade</h2>
+        <div class="tier-list" id="tier-filters"></div>
+      </section>
+
+      <section class="sidebar-block neighbourhood-block">
+        <div class="block-head">
+          <h2>Bairros</h2>
+          <div class="neighbourhood-actions">
+            <button type="button" id="neighbourhood-clear" class="text-btn">Limpar</button>
+            <button type="button" id="neighbourhood-central" class="text-btn">Centrais</button>
+          </div>
+        </div>
+        <input id="neighbourhood-search" type="search" placeholder="Buscar bairro..." />
+        <p class="neighbourhood-hint" id="neighbourhood-hint">Nenhum selecionado = todos · salvo na URL e sessão</p>
+        <div class="neighbourhood-list" id="neighbourhood-filters"></div>
+      </section>
+
+      <section class="sidebar-block">
+        <h2>Prioridades</h2>
+        <p class="priority-hint">Destacam os mais aderentes · não remove os demais</p>
+        <label class="toggle priority">
+          <input type="checkbox" id="priority-apartment" checked />
+          <span>Apartamento</span>
+        </label>
+        <label class="toggle priority">
+          <input type="checkbox" id="priority-sacada" checked />
+          <span>Sacada / varanda</span>
+        </label>
+        <label class="toggle priority">
+          <input type="checkbox" id="priority-sun" checked />
+          <span>Pega sol / luminoso</span>
+        </label>
+        <label class="toggle priority">
+          <input type="checkbox" id="priority-pets" />
+          <span>Aceita pets</span>
+        </label>
+        <label class="toggle priority">
+          <input type="checkbox" id="priority-parking" />
+          <span>Com vaga</span>
+        </label>
+      </section>
+
+      <section class="sidebar-block">
+        <h2>Imobiliária</h2>
+        <div class="chip-group" id="source-filters"></div>
+      </section>
+
+      <section class="sidebar-block">
+        <h2>Ordenar</h2>
+        <select id="sort-by">
+          <option value="fit-desc">Melhor aderência</option>
+          <option value="totalCost-asc">Menor total</option>
+          <option value="totalCost-desc">Maior total</option>
+          <option value="centrality-desc">Mais central</option>
+          <option value="pricePerSqm-asc">Menor R$/m²</option>
+          <option value="area-desc">Maior área</option>
+        </select>
+      </section>
+
+      <section class="sidebar-block actions">
+        <label class="file-input">
+          <input type="file" id="file-input" accept="application/json,.json" hidden />
+          <span>Carregar JSON</span>
+        </label>
+        <button type="button" id="reload-btn">Recarregar catálogo</button>
+      </section>
+    </aside>
+
+    <main class="workspace">
+      <header class="topbar">
+        <div id="status" class="status">Carregando catálogo...</div>
+        <div class="topbar-actions">
+          <button type="button" id="compare-btn" disabled>Comparar selecionados (<span id="compare-count">0</span>)</button>
+          <button type="button" id="clear-pins">Limpar pins</button>
+        </div>
+      </header>
+
+      <section class="funnel" id="funnel" hidden></section>
+
+      <section class="dashboard" id="dashboard" hidden>
+        <article class="panel compass-panel">
+          <div class="panel-head">
+            <h2>Mapa de centralidade</h2>
+            <p>Clique no bairro para filtrar · tamanho = oferta visível</p>
+          </div>
+          <div class="compass-wrap">
+            <svg id="compass" viewBox="0 0 420 420" aria-label="Mapa radial de bairros"></svg>
+            <div class="compass-legend">
+              <span><i class="dot core"></i>Núcleo</span>
+              <span><i class="dot near"></i>Adjacente</span>
+              <span><i class="dot mid"></i>Intermediário</span>
+              <span><i class="dot outer"></i>Periferia</span>
+            </div>
+          </div>
+        </article>
+
+        <article class="panel scatter-panel">
+          <div class="panel-head">
+            <h2>Preço × centralidade</h2>
+            <p>Cada ponto é um imóvel · cor = encaixe no perfil</p>
+          </div>
+          <canvas id="scatter" width="640" height="360" aria-label="Gráfico de dispersão"></canvas>
+          <div class="scatter-legend">
+            <span><i class="swatch high"></i>Encaixe alto</span>
+            <span><i class="swatch mid"></i>Parcial</span>
+            <span><i class="swatch low"></i>Fora do perfil</span>
+          </div>
+        </article>
+      </section>
+
+      <section class="results-head" id="results-head" hidden>
+        <div>
+          <h2 id="results-title">Imóveis no perfil</h2>
+          <p id="results-subtitle"></p>
+        </div>
+        <div class="view-toggle">
+          <button type="button" class="view-btn active" data-view="cards">Cards</button>
+          <button type="button" class="view-btn" data-view="compact">Compacto</button>
+        </div>
+      </section>
+
+      <section class="cards" id="cards" hidden></section>
+      <section class="empty" id="empty" hidden>
+        <h3>Nenhum imóvel neste recorte</h3>
+        <p>Amplie o perfil para “Ampliado” ou desmarque algum filtro de característica.</p>
+      </section>
+    </main>
+  </div>
+
+  <dialog id="detail-dialog">
+    <div class="dialog-inner detail-dialog-inner">
+      <button type="button" class="dialog-close glass-control" id="detail-close" aria-label="Fechar">×</button>
+      <div id="detail-content"></div>
+    </div>
+  </dialog>
+
+  <dialog id="compare-dialog">
+    <div class="dialog-inner wide">
+      <button type="button" class="dialog-close" id="compare-close" aria-label="Fechar">×</button>
+      <h2>Comparação lado a lado</h2>
+      <div id="compare-content" class="compare-grid"></div>
+    </div>
+  </dialog>
+
+  <script src="explorer.js"></script>
+</body>
+</html>

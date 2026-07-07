@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Analisador de Imóveis — Porto Alegre</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="header">
+    <div>
+      <p class="eyebrow">Etapa 1 · QuintoAndar</p>
+      <h1>Analisador de aluguel</h1>
+      <p class="subtitle">Porto Alegre, RS — valor total até R$ 4.500</p>
+    </div>
+    <div class="header-actions">
+      <a class="link-explorer" href="explorer.html">Explorador visual →</a>
+      <label class="file-input">
+        <input type="file" id="file-input" accept="application/json,.json" hidden />
+        <span>Carregar JSON</span>
+      </label>
+      <button id="reload-btn" type="button">Recarregar data/catalog.json</button>
+    </div>
+  </header>
+
+  <main>
+    <section id="status" class="status">Carregando catálogo...</section>
+
+    <section class="kpis" id="kpis" hidden>
+      <article class="kpi"><span>Imóveis</span><strong id="kpi-count">—</strong></article>
+      <article class="kpi"><span>Total médio</span><strong id="kpi-avg-total">—</strong></article>
+      <article class="kpi"><span>R$/m² médio</span><strong id="kpi-avg-ppm">—</strong></article>
+      <article class="kpi"><span>Mobiliados</span><strong id="kpi-furnished">—</strong></article>
+      <article class="kpi"><span>Aceita pets</span><strong id="kpi-pets">—</strong></article>
+      <article class="kpi"><span>Com vaga</span><strong id="kpi-parking">—</strong></article>
+    </section>
+
+    <section class="panel" id="filters-panel" hidden>
+      <div class="panel-head">
+        <h2>Filtros locais</h2>
+        <button id="clear-filters" type="button">Limpar</button>
+      </div>
+      <div class="filters-grid">
+        <label>
+          Imobiliária
+          <select id="filter-source"><option value="">Todas</option></select>
+        </label>
+        <label>
+          Bairro
+          <select id="filter-neighbourhood"><option value="">Todos</option></select>
+        </label>
+        <label>
+          Tipo
+          <select id="filter-type"><option value="">Todos</option></select>
+        </label>
+        <label>
+          Quartos (mín.)
+          <select id="filter-bedrooms">
+            <option value="">Qualquer</option>
+            <option value="1">1+</option>
+            <option value="2">2+</option>
+            <option value="3">3+</option>
+          </select>
+        </label>
+        <label>
+          Mobiliado
+          <select id="filter-furnished">
+            <option value="">Qualquer</option>
+            <option value="yes">Sim</option>
+            <option value="no">Não</option>
+          </select>
+        </label>
+        <label>
+          Pets
+          <select id="filter-pets">
+            <option value="">Qualquer</option>
+            <option value="yes">Aceita</option>
+            <option value="no">Não aceita</option>
+          </select>
+        </label>
+        <label>
+          Busca
+          <input id="filter-search" type="search" placeholder="Rua, bairro, título..." />
+        </label>
+      </div>
+    </section>
+
+    <section class="layout" id="content" hidden>
+      <div class="panel chart-panel">
+        <div class="panel-head">
+          <h2>Distribuição por bairro</h2>
+          <p id="visible-count"></p>
+        </div>
+        <div id="neighbourhood-chart" class="bar-chart"></div>
+      </div>
+
+      <div class="panel table-panel">
+        <div class="panel-head">
+          <h2>Imóveis</h2>
+          <label>
+            Ordenar por
+            <select id="sort-by">
+              <option value="totalCost-asc">Menor total</option>
+              <option value="totalCost-desc">Maior total</option>
+              <option value="pricePerSqm-asc">Menor R$/m²</option>
+              <option value="pricePerSqm-desc">Maior R$/m²</option>
+              <option value="area-desc">Maior área</option>
+            </select>
+          </label>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Imóvel</th>
+                <th>Bairro</th>
+                <th>Total</th>
+                <th>Aluguel</th>
+                <th>m²</th>
+                <th>R$/m²</th>
+                <th>Q/V</th>
+                <th>Flags</th>
+              </tr>
+            </thead>
+            <tbody id="listings-body"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
