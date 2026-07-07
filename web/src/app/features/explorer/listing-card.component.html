@@ -20,12 +20,10 @@
 
   <div class="card-image-zone">
     <div class="card-score glass-control" [class]="scoreClass">{{ score }}% aderência</div>
-    @if (hasNav) {
-      <span class="gallery-counter glass-control">{{ photoIndex + 1 }}/{{ photos.length }}</span>
-    }
   </div>
 
   @if (hasNav) {
+    <span class="gallery-counter glass-control">{{ photoIndex + 1 }}/{{ photos.length }}</span>
     <div class="gallery-controls" aria-hidden="false">
       <button type="button" class="gallery-nav prev" (click)="onPrev($event)" aria-label="Foto anterior">‹</button>
       <button type="button" class="gallery-nav next" (click)="onNext($event)" aria-label="Próxima foto">›</button>
