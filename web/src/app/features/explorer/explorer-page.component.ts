@@ -23,7 +23,7 @@ import {
   getPpmTier,
   ppmTierClass,
 } from '../../core/utils/cost.util';
-import { getRentPerSqm } from '../../core/utils/neighbourhood-ppm.util';
+import { getHousingPerSqm } from '../../core/utils/neighbourhood-ppm.util';
 import { ListingCardComponent } from './listing-card.component';
 
 @Component({
@@ -184,18 +184,18 @@ export class ExplorerPageComponent implements OnInit {
     return amount > 0 ? formatBrl(amount) : '—';
   }
 
-  detailRentPerSqm(item: ExplorerListing): number | null {
-    return getRentPerSqm(item);
+  detailHousingPerSqm(item: ExplorerListing): number | null {
+    return getHousingPerSqm(item);
   }
 
-  detailNeighbourhoodMedianRentPpm(item: ExplorerListing): number | null {
-    return this.state.getNeighbourhoodMedianRentPpm(item.neighbourhood);
+  detailNeighbourhoodMedianHousingPpm(item: ExplorerListing): number | null {
+    return this.state.getNeighbourhoodMedianHousingPpm(item.neighbourhood);
   }
 
   detailPpmTierClass(item: ExplorerListing): string {
     return ppmTierClass(getPpmTier(
-      this.detailRentPerSqm(item),
-      this.detailNeighbourhoodMedianRentPpm(item),
+      this.detailHousingPerSqm(item),
+      this.detailNeighbourhoodMedianHousingPpm(item),
     ));
   }
 

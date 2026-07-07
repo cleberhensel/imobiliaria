@@ -14,8 +14,8 @@ import {
 import { PersistenceService } from './persistence.service';
 import { normalizeText } from '../utils/cost.util';
 import {
-  buildNeighbourhoodMedianRentPpm,
-  getRentPerSqm,
+  buildNeighbourhoodMedianHousingPpm,
+  getHousingPerSqm,
   neighbourhoodKey,
 } from '../utils/neighbourhood-ppm.util';
 
@@ -74,17 +74,17 @@ export class ExplorerState {
   readonly compareCount = computed(() => this.pinned().size);
   readonly compareEnabled = computed(() => this.pinned().size >= 2);
 
-  readonly neighbourhoodMedianRentPpmByKey = computed(() => (
-    buildNeighbourhoodMedianRentPpm(this.enriched())
+  readonly neighbourhoodMedianHousingPpmByKey = computed(() => (
+    buildNeighbourhoodMedianHousingPpm(this.enriched())
   ));
 
-  getNeighbourhoodMedianRentPpm(neighbourhood?: string | null): number | null {
+  getNeighbourhoodMedianHousingPpm(neighbourhood?: string | null): number | null {
     const key = neighbourhoodKey(neighbourhood);
-    return this.neighbourhoodMedianRentPpmByKey()[key] ?? null;
+    return this.neighbourhoodMedianHousingPpmByKey()[key] ?? null;
   }
 
-  getListingRentPerSqm(item: ExplorerListing): number | null {
-    return getRentPerSqm(item);
+  getListingHousingPerSqm(item: ExplorerListing): number | null {
+    return getHousingPerSqm(item);
   }
 
   async bootstrap(): Promise<void> {

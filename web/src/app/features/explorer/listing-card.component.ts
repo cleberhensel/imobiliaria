@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ExplorerListing } from '../../core/models/explorer-listing.model';
 import { ExplorerState } from '../../core/data/explorer-state.service';
 import { formatBrl, formatLogradouro, getCostLines, getPpmTier, ppmTierClass } from '../../core/utils/cost.util';
-import { getRentPerSqm } from '../../core/utils/neighbourhood-ppm.util';
+import { getHousingPerSqm } from '../../core/utils/neighbourhood-ppm.util';
 import { normalizeListingTitle } from '../../core/utils/format.util';
 import { inject } from '@angular/core';
 
@@ -90,23 +90,23 @@ export class ListingCardComponent {
     return normalizeListingTitle(this.item.title);
   }
 
-  neighbourhoodMedianRentPpm(): number | null {
-    return this.state.getNeighbourhoodMedianRentPpm(this.item.neighbourhood);
+  neighbourhoodMedianHousingPpm(): number | null {
+    return this.state.getNeighbourhoodMedianHousingPpm(this.item.neighbourhood);
   }
 
-  rentPerSqm(): number | null {
-    return getRentPerSqm(this.item);
+  housingPerSqm(): number | null {
+    return getHousingPerSqm(this.item);
   }
 
-  neighbourhoodMedianRentPpmLabel(): string {
-    const median = this.neighbourhoodMedianRentPpm();
+  neighbourhoodMedianHousingPpmLabel(): string {
+    const median = this.neighbourhoodMedianHousingPpm();
     if (!median) return '';
-    return `Mediana do bairro (aluguel, aptos): ${formatBrl(median)}/m²`;
+    return `Mediana do bairro (alug.+cond.+IPTU, aptos): ${formatBrl(median)}/m²`;
   }
 
   ppmTierClass(): string {
-    const benchmark = this.neighbourhoodMedianRentPpm();
-    return ppmTierClass(getPpmTier(this.rentPerSqm(), benchmark));
+    const benchmark = this.neighbourhoodMedianHousingPpm();
+    return ppmTierClass(getPpmTier(this.housingPerSqm(), benchmark));
   }
 
   onPrev(event: Event): void {

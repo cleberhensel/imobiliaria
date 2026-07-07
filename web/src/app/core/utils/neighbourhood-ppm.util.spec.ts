@@ -1,9 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import {
-  buildNeighbourhoodMedianRentPpm,
-  countsForNeighbourhoodRentPpm,
+  buildNeighbourhoodMedianHousingPpm,
+  countsForNeighbourhoodHousingPpm,
   decodeHtmlEntities,
-  getRentPerSqm,
+  getHousingMonthlyCost,
+  getHousingPerSqm,
   isCompactUnit,
   median,
   neighbourhoodKey,
@@ -16,44 +17,46 @@ describe('neighbourhood-ppm.util', () => {
     expect(neighbourhoodKey('Central Parque')).toBe('central park');
   });
 
-  it('decodifica entidades HTML', () => {
-    expect(decodeHtmlEntities('Passo d&amp;#039;Areia')).toBe("Passo d'Areia");
-  });
-
-  it('identifica unidades compactas', () => {
-    expect(isCompactUnit('StudioOuKitchenette', 'Kitnet para aluguel')).toBe(true);
-    expect(isCompactUnit('Apartamento JK', 'Apartamento JK · Centro')).toBe(true);
-    expect(isCompactUnit('Apartamento', 'Apartamento 2 quartos')).toBe(false);
+  it('soma aluguel, condomínio e IPTU na base de moradia', () => {
+    expect(getHousingMonthlyCost({
+      rentPrice: 1200,
+      condoPrice: 300,
+      iptuPrice: 50,
+    })).toBe(1550);
+    expect(getHousingMonthlyCost({
+      rentPrice: 1200,
+      condoIptu: 280,
+    })).toBe(1480);
+    expect(getHousingPerSqm({
+      rentPrice: 1500,
+      condoIptu: 500,
+      area: 50,
+    })).toBe(40);
   });
 
   it('exclui studios da base da mediana', () => {
-    expect(countsForNeighbourhoodRentPpm({
+    expect(countsForNeighbourhoodHousingPpm({
       isApartment: true,
       type: 'StudioOuKitchenette',
       title: 'Kitnet',
       area: 24,
       rentPrice: 1200,
+      condoIptu: 100,
     })).toBe(false);
-    expect(countsForNeighbourhoodRentPpm({
-      isApartment: true,
-      type: 'Apartamento',
-      title: 'Apartamento 2 quartos',
-      area: 50,
-      rentPrice: 1200,
-    })).toBe(true);
   });
 
-  it('calcula mediana de aluguel/m² por bairro normalizado', () => {
+  it('calcula mediana de moradia/m² por bairro normalizado', () => {
     const listings = [
-      { neighbourhood: "Mont'Serrat", isApartment: true, type: 'Apartamento', title: 'Apto', area: 50, rentPrice: 1000 },
-      { neighbourhood: 'Mont Serrat', isApartment: true, type: 'Apartamento', title: 'Apto', area: 50, rentPrice: 2000 },
-      { neighbourhood: "Mont&#039;Serrat", isApartment: true, type: 'StudioOuKitchenette', title: 'Kitnet', area: 20, rentPrice: 3000 },
-      { neighbourhood: 'Mont Serrat', isApartment: true, type: 'Apartamento', title: 'Apto', area: 50, rentPrice: 3000 },
+      { neighbourhood: "Mont'Serrat", isApartment: true, type: 'Apartamento', title: 'Apto', area: 50, rentPrice: 1000, condoIptu: 1000 },
+      { neighbourhood: 'Mont Serrat', isApartment: true, type: 'Apartamento', title: 'Apto', area: 50, rentPrice: 2000, condoIptu: 2000 },
+      { neighbourhood: "Mont&#039;Serrat", isApartment: true, type: 'StudioOuKitchenette', title: 'Kitnet', area: 20, rentPrice: 3000, condoIptu: 3000 },
+      { neighbourhood: 'Mont Serrat', isApartment: true, type: 'Apartamento', title: 'Apto', area: 50, rentPrice: 3000, condoIptu: 3000 },
     ];
 
-    const result = buildNeighbourhoodMedianRentPpm(listings);
-    expect(result['mont serrat']).toBe(40);
-    expect(getRentPerSqm({ rentPrice: 1500, area: 50 })).toBe(30);
-    expect(median([20, 40, 60])).toBe(40);
+    const result = buildNeighbourhoodMedianHousingPpm(listings);
+    expect(result['mont serrat']).toBe(80);
+    expect(median([40, 80, 120])).toBe(80);
+    expect(decodeHtmlEntities('Passo d&amp;#039;Areia')).toBe("Passo d'Areia");
+    expect(isCompactUnit('Apartamento JK', 'Apartamento JK · Centro')).toBe(true);
   });
 });

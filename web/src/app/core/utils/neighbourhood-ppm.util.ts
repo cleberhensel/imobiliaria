@@ -74,20 +74,52 @@ export function isCompactUnit(type?: string, title?: string): boolean {
   return /studio|kitnet|kitchenette|\bjk\b|loft|flat|cobertura duplex/.test(haystack);
 }
 
-export function countsForNeighbourhoodRentPpm(item: {
+/** Aluguel + condomínio + IPTU (sem taxas, seguro ou outros extras). */
+export function getHousingMonthlyCost(item: {
+  rentPrice?: number;
+  condoPrice?: number | null;
+  iptuPrice?: number | null;
+  condoIptu?: number;
+}): number | null {
+  const rent = item.rentPrice || 0;
+  if (!rent) return null;
+
+  const condo = item.condoPrice ?? 0;
+  const iptu = item.iptuPrice ?? 0;
+  if (condo > 0 || iptu > 0) return rent + condo + iptu;
+  if (item.condoIptu) return rent + item.condoIptu;
+  return rent;
+}
+
+export function countsForNeighbourhoodHousingPpm(item: {
   isApartment?: boolean;
   type?: string;
   title?: string;
   area?: number | null;
   rentPrice?: number;
+  condoPrice?: number | null;
+  iptuPrice?: number | null;
+  condoIptu?: number;
 }): boolean {
   if (!item.isApartment) return false;
   if (isCompactUnit(item.type, item.title)) return false;
   if (!item.area || item.area <= 0) return false;
-  if (!item.rentPrice || item.rentPrice <= 0) return false;
-  return true;
+  return getHousingMonthlyCost(item) != null;
 }
 
+export function getHousingPerSqm(item: {
+  rentPrice?: number;
+  condoPrice?: number | null;
+  iptuPrice?: number | null;
+  condoIptu?: number;
+  area?: number | null;
+}): number | null {
+  const housing = getHousingMonthlyCost(item);
+  if (!housing || !item.area) return null;
+  return Math.round((housing / item.area) * 100) / 100;
+}
+
+/** @deprecated use getHousingPerSqm */
 export function getRentPerSqm(item: { rentPrice?: number; area?: number | null }): number | null {
   if (!item.area || !item.rentPrice) return null;
   return Math.round((item.rentPrice / item.area) * 100) / 100;
@@ -101,7 +133,7 @@ export function median(values: number[]): number | null {
   return Math.round(value * 100) / 100;
 }
 
-export function buildNeighbourhoodMedianRentPpm(
+export function buildNeighbourhoodMedianHousingPpm(
   listings: Array<{
     neighbourhood?: string | null;
     isApartment?: boolean;
@@ -109,14 +141,17 @@ export function buildNeighbourhoodMedianRentPpm(
     title?: string;
     area?: number | null;
     rentPrice?: number;
+    condoPrice?: number | null;
+    iptuPrice?: number | null;
+    condoIptu?: number;
   }>,
 ): Record<string, number> {
   const groups: Record<string, number[]> = {};
 
   for (const item of listings) {
-    if (!countsForNeighbourhoodRentPpm(item)) continue;
+    if (!countsForNeighbourhoodHousingPpm(item)) continue;
     const key = neighbourhoodKey(item.neighbourhood);
-    const ppm = getRentPerSqm(item);
+    const ppm = getHousingPerSqm(item);
     if (!ppm) continue;
     if (!groups[key]) groups[key] = [];
     groups[key].push(ppm);
@@ -129,3 +164,9 @@ export function buildNeighbourhoodMedianRentPpm(
   }
   return result;
 }
+
+/** @deprecated use buildNeighbourhoodMedianHousingPpm */
+export const buildNeighbourhoodMedianRentPpm = buildNeighbourhoodMedianHousingPpm;
+
+/** @deprecated use countsForNeighbourhoodHousingPpm */
+export const countsForNeighbourhoodRentPpm = countsForNeighbourhoodHousingPpm;
