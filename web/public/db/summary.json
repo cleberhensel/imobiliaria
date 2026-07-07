@@ -1,0 +1,510 @@
+{
+  "byNeighbourhood": [
+    {
+      "name": "Centro Histórico",
+      "count": 248
+    },
+    {
+      "name": "Petrópolis",
+      "count": 164
+    },
+    {
+      "name": "Partenon",
+      "count": 112
+    },
+    {
+      "name": "Cidade Baixa",
+      "count": 110
+    },
+    {
+      "name": "Menino Deus",
+      "count": 95
+    },
+    {
+      "name": "Rio Branco",
+      "count": 88
+    },
+    {
+      "name": "Sarandi",
+      "count": 77
+    },
+    {
+      "name": "Santana",
+      "count": 77
+    },
+    {
+      "name": "Humaitá",
+      "count": 67
+    },
+    {
+      "name": "Tristeza",
+      "count": 58
+    },
+    {
+      "name": "Jardim Botânico",
+      "count": 52
+    },
+    {
+      "name": "Teresópolis",
+      "count": 51
+    },
+    {
+      "name": "Auxiliadora",
+      "count": 51
+    },
+    {
+      "name": "Azenha",
+      "count": 49
+    },
+    {
+      "name": "Cristo Redentor",
+      "count": 49
+    },
+    {
+      "name": "Vila Ipiranga",
+      "count": 47
+    },
+    {
+      "name": "Boa Vista",
+      "count": 47
+    },
+    {
+      "name": "Cristal",
+      "count": 46
+    },
+    {
+      "name": "Independência",
+      "count": 45
+    },
+    {
+      "name": "Bom Fim",
+      "count": 43
+    },
+    {
+      "name": "Bela Vista",
+      "count": 43
+    },
+    {
+      "name": "Alto Petrópolis",
+      "count": 40
+    },
+    {
+      "name": "Passo d`Areia",
+      "count": 40
+    },
+    {
+      "name": "Jardim do Salso",
+      "count": 39
+    },
+    {
+      "name": "Passo da Areia",
+      "count": 37
+    },
+    {
+      "name": "Floresta",
+      "count": 36
+    },
+    {
+      "name": "Moinhos de Vento",
+      "count": 36
+    },
+    {
+      "name": "Cavalhada",
+      "count": 35
+    },
+    {
+      "name": "Vila Nova",
+      "count": 33
+    },
+    {
+      "name": "Higienópolis",
+      "count": 33
+    },
+    {
+      "name": "Jardim Carvalho",
+      "count": 32
+    },
+    {
+      "name": "Morro Santana",
+      "count": 31
+    },
+    {
+      "name": "Farroupilha",
+      "count": 30
+    },
+    {
+      "name": "Santo Antônio",
+      "count": 30
+    },
+    {
+      "name": "Praia de Belas",
+      "count": 27
+    },
+    {
+      "name": "Hípica",
+      "count": 27
+    },
+    {
+      "name": "São João",
+      "count": 26
+    },
+    {
+      "name": "Nonoai",
+      "count": 25
+    },
+    {
+      "name": "Chácara das Pedras",
+      "count": 24
+    },
+    {
+      "name": "São Geraldo",
+      "count": 23
+    },
+    {
+      "name": "Jardim Itu",
+      "count": 20
+    },
+    {
+      "name": "Medianeira",
+      "count": 19
+    },
+    {
+      "name": "Jardim Itu Sabará",
+      "count": 19
+    },
+    {
+      "name": "Central Park",
+      "count": 18
+    },
+    {
+      "name": "Camaquã",
+      "count": 17
+    },
+    {
+      "name": "Parque Santa Fé",
+      "count": 17
+    },
+    {
+      "name": "São Sebastião",
+      "count": 17
+    },
+    {
+      "name": "Rubem Berta",
+      "count": 16
+    },
+    {
+      "name": "Ipanema",
+      "count": 16
+    },
+    {
+      "name": "Passo D’areia",
+      "count": 16
+    },
+    {
+      "name": "Restinga",
+      "count": 15
+    },
+    {
+      "name": "Jardim Lindóia",
+      "count": 15
+    },
+    {
+      "name": "Glória",
+      "count": 15
+    },
+    {
+      "name": "Jardim Europa",
+      "count": 13
+    },
+    {
+      "name": "Vila Jardim",
+      "count": 12
+    },
+    {
+      "name": "Jardim Sabará",
+      "count": 12
+    },
+    {
+      "name": "Agronomia",
+      "count": 11
+    },
+    {
+      "name": "Protásio Alves",
+      "count": 11
+    },
+    {
+      "name": "Santa Tereza",
+      "count": 11
+    },
+    {
+      "name": "Mont Serrat",
+      "count": 11
+    },
+    {
+      "name": "Três Figueiras",
+      "count": 10
+    },
+    {
+      "name": "Bom Jesus",
+      "count": 10
+    },
+    {
+      "name": "Campo Novo",
+      "count": 9
+    },
+    {
+      "name": "Passo das Pedras",
+      "count": 9
+    },
+    {
+      "name": "Farrapos",
+      "count": 9
+    },
+    {
+      "name": "Aberta dos Morros",
+      "count": 9
+    },
+    {
+      "name": "Mário Quintana",
+      "count": 8
+    },
+    {
+      "name": "Navegantes",
+      "count": 8
+    },
+    {
+      "name": "Guarujá",
+      "count": 8
+    },
+    {
+      "name": "Santa Maria Goretti",
+      "count": 8
+    },
+    {
+      "name": "Passo d’Areia",
+      "count": 8
+    },
+    {
+      "name": "Costa E Silva",
+      "count": 7
+    },
+    {
+      "name": "Jardim Leopoldina",
+      "count": 7
+    },
+    {
+      "name": "Jardim Dona Leopoldina",
+      "count": 6
+    },
+    {
+      "name": "São José",
+      "count": 6
+    },
+    {
+      "name": "Mont’serrat",
+      "count": 6
+    },
+    {
+      "name": "Lomba do Pinheiro",
+      "count": 5
+    },
+    {
+      "name": "Santa Rosa de Lima",
+      "count": 5
+    },
+    {
+      "name": "Passo d&#039;Areia",
+      "count": 5
+    },
+    {
+      "name": "Mont'Serrat",
+      "count": 5
+    },
+    {
+      "name": "Niterói",
+      "count": 4
+    },
+    {
+      "name": "Belém Novo",
+      "count": 4
+    },
+    {
+      "name": "Espírito Santo",
+      "count": 4
+    },
+    {
+      "name": "Passo d'Areia",
+      "count": 4
+    },
+    {
+      "name": "Vila Assunção",
+      "count": 3
+    },
+    {
+      "name": "Santa Fe",
+      "count": 3
+    },
+    {
+      "name": "Vila Joao Pessoa",
+      "count": 3
+    },
+    {
+      "name": "Santa Cecília",
+      "count": 3
+    },
+    {
+      "name": "Mont&#039;Serrat",
+      "count": 3
+    },
+    {
+      "name": "Chapéu do Sol",
+      "count": 2
+    },
+    {
+      "name": "Jardim Itu-sabará",
+      "count": 2
+    },
+    {
+      "name": "Jardim Floresta",
+      "count": 2
+    },
+    {
+      "name": "Jardim São Pedro",
+      "count": 2
+    },
+    {
+      "name": "Cecília",
+      "count": 2
+    },
+    {
+      "name": "Ponta Grossa",
+      "count": 2
+    },
+    {
+      "name": "Jardim Planalto",
+      "count": 2
+    },
+    {
+      "name": "Bairro",
+      "count": 2
+    },
+    {
+      "name": "Vila João Pessoa",
+      "count": 2
+    },
+    {
+      "name": "Fátima",
+      "count": 2
+    },
+    {
+      "name": "Vila São José",
+      "count": 2
+    },
+    {
+      "name": "Mont&amp;#039;Serrat",
+      "count": 2
+    },
+    {
+      "name": "Mont’Serrat",
+      "count": 2
+    },
+    {
+      "name": "Central Parque",
+      "count": 2
+    },
+    {
+      "name": "Centro",
+      "count": 2
+    },
+    {
+      "name": "Planalto",
+      "count": 1
+    },
+    {
+      "name": "Jardim Algarve",
+      "count": 1
+    },
+    {
+      "name": "Petropolis",
+      "count": 1
+    },
+    {
+      "name": "Restinga velha",
+      "count": 1
+    },
+    {
+      "name": "Alto Teresópolis",
+      "count": 1
+    },
+    {
+      "name": "Costa e Silva",
+      "count": 1
+    },
+    {
+      "name": "Chapéu Do Sol",
+      "count": 1
+    },
+    {
+      "name": "Sao Sebastiao",
+      "count": 1
+    },
+    {
+      "name": "Cais do Porto",
+      "count": 1
+    },
+    {
+      "name": "Coronel Aparício Borges",
+      "count": 1
+    },
+    {
+      "name": "Paternon",
+      "count": 1
+    },
+    {
+      "name": "Passo d&amp;#039;Areia",
+      "count": 1
+    },
+    {
+      "name": "Vl Sto Agostinho",
+      "count": 1
+    },
+    {
+      "name": "Serraria",
+      "count": 1
+    },
+    {
+      "name": "Coronel Aparicio Borges",
+      "count": 1
+    },
+    {
+      "name": "Sétimo Céu",
+      "count": 1
+    },
+    {
+      "name": "Belém Velho",
+      "count": 1
+    }
+  ],
+  "totalCost": {
+    "min": 1501,
+    "max": 5000,
+    "avg": 3180
+  },
+  "area": {
+    "min": 12,
+    "max": 530,
+    "avg": 65
+  },
+  "pricePerSqm": {
+    "min": 5.79,
+    "max": 255.25,
+    "avg": 60
+  },
+  "furnished": 1520,
+  "acceptsPets": 1582,
+  "withParking": 1637,
+  "apartments": 2258,
+  "central": 2251,
+  "withBalcony": 478,
+  "withSun": 703
+}

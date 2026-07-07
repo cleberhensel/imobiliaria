@@ -1,0 +1,22 @@
+{
+  "source": "auxiliadora-predial",
+  "city": "Porto Alegre",
+  "state": "RS",
+  "filter": {
+    "minTotalCost": 1500,
+    "maxTotalCost": 5000
+  },
+  "startedAt": "2026-07-07T16:12:41.621Z",
+  "resumed": false,
+  "reportedTotal": 2833,
+  "pagesFetched": 71,
+  "collected": 1000,
+  "discarded": {
+    "city": 0,
+    "cost": 0,
+    "duplicate": 0
+  },
+  "errors": [],
+  "finishedAt": "2026-07-07T16:13:47.507Z",
+  "completed": true
+}

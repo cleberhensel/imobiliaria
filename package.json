@@ -1,0 +1,23 @@
+{
+  "name": "imoveis-analyzer",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "crawl:quintoandar": "node scripts/crawl-quintoandar.mjs",
+    "crawl:auxiliadora": "node scripts/crawl-auxiliadora.mjs",
+    "crawl:guarida": "node scripts/crawl-guarida.mjs",
+    "crawl:all": "node scripts/crawl-all.mjs",
+    "migrate:legacy": "node scripts/migrate-legacy-to-ndjson.mjs",
+    "db:compile": "node scripts/compile-db.mjs",
+    "db:build": "node scripts/migrate-legacy-to-ndjson.mjs && node scripts/compile-db.mjs",
+    "fetch:quintoandar": "node scripts/crawl-quintoandar.mjs",
+    "fetch:auxiliadora": "node scripts/crawl-auxiliadora.mjs",
+    "fetch:guarida": "node scripts/crawl-guarida.mjs",
+    "fetch:all": "node scripts/crawl-all.mjs",
+    "merge:catalogs": "node scripts/compile-db.mjs",
+    "web:install": "npm --prefix web install",
+    "web:build": "npm --prefix web run build",
+    "web:start": "npm --prefix web start"
+  }
+}

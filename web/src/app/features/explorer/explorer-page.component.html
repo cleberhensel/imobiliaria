@@ -1,0 +1,268 @@
+<div class="app" [class.sidebar-collapsed]="state.sidebarCollapsed()">
+  <aside class="sidebar" id="sidebar">
+    <section class="sidebar-block sidebar-block-first">
+      <h2>Perfil de busca</h2>
+      <div class="preset-row">
+        <button type="button" class="preset" [class.active]="state.preset() === 'focus'" (click)="onPreset('focus')">Foco total</button>
+        <button type="button" class="preset" [class.active]="state.preset() === 'relaxed'" (click)="onPreset('relaxed')">Ampliado</button>
+        <button type="button" class="preset" [class.active]="state.preset() === 'custom'">Personalizado</button>
+      </div>
+    </section>
+
+    <section class="sidebar-block">
+      <h2>Centralidade</h2>
+      <div class="tier-list">
+        @for (entry of tierEntries; track entry[0]) {
+          <button
+            type="button"
+            class="tier-btn"
+            [class.active]="state.selectedTier() === entry[0]"
+            (click)="onToggleTier(entry[0])"
+          >
+            <span>{{ entry[1].label }}</span>
+            <small>{{ state.tierCounts()[entry[0]] || 0 }}</small>
+          </button>
+        }
+      </div>
+    </section>
+
+    <section class="sidebar-block neighbourhood-block">
+      <div class="block-head">
+        <h2>Bairros</h2>
+        <div class="neighbourhood-actions">
+          <button type="button" class="text-btn" (click)="state.clearNeighbourhoods()">Limpar</button>
+          <button type="button" class="text-btn" (click)="state.selectCentralNeighbourhoods()">Centrais</button>
+        </div>
+      </div>
+      <input
+        id="neighbourhood-search"
+        type="search"
+        placeholder="Buscar bairro..."
+        [ngModel]="state.neighbourhoodSearch()"
+        (ngModelChange)="state.neighbourhoodSearch.set($event)"
+      />
+      <div class="neighbourhood-tags">
+        @for (option of state.neighbourhoodOptions(); track option.name) {
+          <button
+            type="button"
+            class="neighbourhood-tag"
+            [class.core]="option.tier === 'core'"
+            [class.near]="option.tier === 'near'"
+            [class.mid]="option.tier === 'mid'"
+            [class.outer]="option.tier === 'outer'"
+            [class.active]="state.selectedNeighbourhoods().has(option.name)"
+            (click)="state.toggleNeighbourhood(option.name)"
+          >
+            {{ option.name }}
+            <span class="neighbourhood-tag-count">{{ option.count }}</span>
+          </button>
+        } @empty {
+          <p class="neighbourhood-empty">Nenhum bairro encontrado.</p>
+        }
+      </div>
+    </section>
+
+    <section class="sidebar-block">
+      <h2>Prioridades</h2>
+      <label class="toggle priority">
+        <input type="checkbox" [ngModel]="state.priorities().apartment" (ngModelChange)="setPriority('apartment', $event)" />
+        <span>Apartamento</span>
+      </label>
+      <label class="toggle priority">
+        <input type="checkbox" [ngModel]="state.priorities().sacada" (ngModelChange)="setPriority('sacada', $event)" />
+        <span>Sacada / varanda</span>
+      </label>
+      <label class="toggle priority">
+        <input type="checkbox" [ngModel]="state.priorities().sun" (ngModelChange)="setPriority('sun', $event)" />
+        <span>Pega sol / luminoso</span>
+      </label>
+      <label class="toggle priority">
+        <input type="checkbox" [ngModel]="state.priorities().pets" (ngModelChange)="setPriority('pets', $event)" />
+        <span>Aceita pets</span>
+      </label>
+      <label class="toggle priority">
+        <input type="checkbox" [ngModel]="state.priorities().parking" (ngModelChange)="setPriority('parking', $event)" />
+        <span>Com vaga</span>
+      </label>
+    </section>
+
+    <section class="sidebar-block">
+      <h2>Imobiliária</h2>
+      <div class="chip-group">
+        @for (source of state.sourceOptions(); track source.id) {
+          <button
+            type="button"
+            class="chip"
+            [class.active]="state.selectedSources().has(source.id)"
+            (click)="state.toggleSource(source.id)"
+          >
+            {{ source.label }}
+          </button>
+        }
+      </div>
+    </section>
+
+    <section class="sidebar-block">
+      <h2>Ordenar</h2>
+      <select id="sort-by" [ngModel]="state.sortKey()" (ngModelChange)="onSortChange($event)">
+        <option value="fit-desc">Melhor aderência</option>
+        <option value="totalCost-asc">Menor total</option>
+        <option value="totalCost-desc">Maior total</option>
+        <option value="centrality-desc">Mais central</option>
+        <option value="pricePerSqm-asc">Menor R$/m²</option>
+        <option value="area-desc">Maior área</option>
+      </select>
+    </section>
+  </aside>
+
+  <main class="workspace">
+    <button
+      type="button"
+      class="sidebar-toggle"
+      (click)="state.toggleSidebar()"
+      [attr.aria-expanded]="!state.sidebarCollapsed()"
+      aria-controls="sidebar"
+    >
+      <span class="sidebar-toggle-icon" aria-hidden="true">{{ state.sidebarCollapsed() ? '›' : '‹' }}</span>
+      <span>{{ state.sidebarCollapsed() ? 'Filtros' : 'Recolher' }}</span>
+    </button>
+
+    @if (state.statusError()) {
+      <div class="status-banner error">{{ state.statusMessage() }}</div>
+    }
+
+    @if (!state.loading() && !state.error()) {
+      <section class="funnel" id="funnel">
+        @for (step of funnelSteps(); track step.label) {
+          <article class="funnel-step" [style.--fill]="step.fill">
+            <span>{{ step.label }}</span>
+            <strong>{{ step.count }}</strong>
+          </article>
+        }
+      </section>
+
+      <section class="results-head" id="results-head">
+        <div>
+          <h2 id="results-title">{{ resultsTitle() }}</h2>
+          <p id="results-subtitle">{{ resultsSubtitle() }}</p>
+        </div>
+      </section>
+
+      @if (state.filtered().length) {
+        <section class="cards" id="cards">
+          @for (item of state.filtered(); track item.id) {
+            <app-listing-card [item]="item" (openDetail)="openDetail($event)" />
+          }
+        </section>
+      } @else {
+        <section class="empty" id="empty">
+          <h3>Nenhum imóvel neste recorte</h3>
+          <p>Amplie o perfil para “Ampliado” ou desmarque algum filtro de característica.</p>
+        </section>
+      }
+    }
+  </main>
+</div>
+
+<dialog #detailDialog id="detail-dialog" (click)="onDetailBackdropClick($event)" (close)="onDetailDialogClosed()">
+  <div class="dialog-inner detail-dialog-inner" (click)="$event.stopPropagation()">
+    <button type="button" class="dialog-close glass-control" aria-label="Fechar" (click)="closeDetail()">×</button>
+    @if (detailItem(); as item) {
+      <div class="detail-layout">
+        <div class="detail-gallery" [attr.data-detail-gallery]="item.id">
+          <div class="detail-gallery-stage">
+            @if (detailPhotos(item).length) {
+              <img
+                class="detail-gallery-image"
+                [src]="detailPhotos(item)[detailPhotoIndex(item)]"
+                alt=""
+              />
+            } @else {
+              <div class="detail-gallery-empty">Sem foto</div>
+            }
+            @if (detailPhotos(item).length > 1) {
+              <button type="button" class="detail-gallery-nav prev glass-control" aria-label="Foto anterior" (click)="detailPhotoNav(item, -1)">‹</button>
+              <button type="button" class="detail-gallery-nav next glass-control" aria-label="Próxima foto" (click)="detailPhotoNav(item, 1)">›</button>
+              <span class="detail-gallery-counter glass-control">{{ detailPhotoIndex(item) + 1 }}/{{ detailPhotos(item).length }}</span>
+            }
+            <span class="detail-score glass-control" [class]="detailScoreClass(item)">{{ item.adherenceScore }}% aderência</span>
+          </div>
+          @if (detailPhotos(item).length > 1) {
+            <div class="detail-thumbs" role="tablist" aria-label="Miniaturas">
+              @for (url of detailPhotos(item); track $index) {
+                <button
+                  type="button"
+                  class="detail-thumb"
+                  [class.active]="$index === detailPhotoIndex(item)"
+                  [attr.aria-label]="'Foto ' + ($index + 1)"
+                  role="tab"
+                  [attr.aria-selected]="$index === detailPhotoIndex(item)"
+                  (click)="state.setPhotoIndex(item.id, $index)"
+                >
+                  <img [src]="url" alt="" loading="lazy" />
+                </button>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="detail-panel">
+          <header class="detail-header">
+            <p class="detail-kicker">{{ item.neighbourhood || 'Sem bairro' }}</p>
+            <h2 class="detail-title">{{ logradouro(item) }}</h2>
+            <p class="detail-subtitle">{{ item.title }}</p>
+          </header>
+
+          <div class="detail-tags tag-row">
+            <span class="tag core">{{ item.tierLabel }}</span>
+            @if (item.signals.sacada) { <span class="tag balcony">Sacada/varanda</span> }
+            @if (item.signals.sun) {
+              <span class="tag sun">{{ item.signals.sunStrong ? 'Sol confirmado' : 'Sol provável' }}</span>
+            }
+            @if (item.acceptsPets) { <span class="tag">Pets</span> }
+            @if (item.parkingSpots > 0) { <span class="tag">{{ item.parkingSpots }} vaga(s)</span> }
+            <span class="tag">{{ item.sourceLabel || item.source }}</span>
+          </div>
+
+          <div class="priority-matches detail-priority-matches">
+            @for (match of detailPriorityMatches(item); track match.key) {
+              <span class="priority-match" [class.on]="match.on" [class.off]="!match.on">{{ match.label }}</span>
+            }
+          </div>
+
+          <div class="detail-block">
+            <div class="detail-spec-grid">
+              <div class="detail-spec-item"><span>Quartos</span><strong>{{ item.bedrooms || '—' }}</strong></div>
+              <div class="detail-spec-item"><span>Banheiros</span><strong>{{ item.bathrooms || '—' }}</strong></div>
+              <div class="detail-spec-item"><span>Área</span><strong>{{ item.area ? item.area + ' m²' : '—' }}</strong></div>
+              <div class="detail-spec-item"><span>R$/m²</span><strong>{{ item.pricePerSqm ? formatMoney(item.pricePerSqm) : '—' }}</strong></div>
+              <div class="detail-spec-item"><span>Vagas</span><strong>{{ item.parkingSpots || '—' }}</strong></div>
+              <div class="detail-spec-item"><span>Fonte</span><strong>{{ item.sourceLabel || item.source }}</strong></div>
+            </div>
+            <table class="detail-table detail-table-costs">
+              <tbody>
+                @for (line of costLines(item); track line.label) {
+                  <tr [class.total]="line.total" [class.extra]="line.extra" [class.muted]="line.muted">
+                    <th scope="row">{{ line.label }}</th>
+                    <td>{{ formatMoney(line.amount) }}</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+
+          @if (detailSignals(item).length) {
+            <div class="detail-signals">
+              <p class="detail-section-label">Sinais detectados</p>
+              <p class="detail-signals-copy">{{ detailSignals(item).join(' · ') }}</p>
+            </div>
+          }
+
+          <div class="detail-actions">
+            <a class="detail-action primary" [href]="item.url" target="_blank" rel="noopener noreferrer">Abrir anúncio</a>
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+</dialog>

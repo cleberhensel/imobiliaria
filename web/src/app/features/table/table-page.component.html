@@ -1,0 +1,170 @@
+<header class="table-header">
+  <div>
+    <p class="eyebrow">Etapa analítica</p>
+    <h1>Analisador de aluguel</h1>
+    <p class="subtitle">{{ filterRangeLabel() }}</p>
+  </div>
+  <div class="header-actions">
+    <a routerLink="/explorar" class="link-explorer">Explorador visual →</a>
+    <label class="file-input">
+      <input type="file" accept="application/json,.json" hidden (change)="onFileChange($event)" />
+      <span>Carregar JSON</span>
+    </label>
+    <button type="button" (click)="reload()">Recarregar catálogo</button>
+  </div>
+</header>
+
+<main class="table-main">
+  <section class="status table-status" [class.error]="statusError()">{{ statusMessage() }}</section>
+
+  @if (!loading()) {
+    <section class="kpis">
+      <article class="kpi"><span>Imóveis</span><strong>{{ manifest()?.count ?? '—' }}</strong></article>
+      <article class="kpi"><span>Total médio</span><strong>{{ avgTotal() ? (avgTotal()! | brl) : '—' }}</strong></article>
+      <article class="kpi"><span>R$/m² médio</span><strong>{{ avgPpm() ? (avgPpm()! | brl) : '—' }}</strong></article>
+      <article class="kpi"><span>Mobiliados</span><strong>{{ summary()?.furnished ?? '—' }}</strong></article>
+      <article class="kpi"><span>Aceita pets</span><strong>{{ summary()?.acceptsPets ?? '—' }}</strong></article>
+      <article class="kpi"><span>Com vaga</span><strong>{{ summary()?.withParking ?? '—' }}</strong></article>
+    </section>
+
+    <section class="panel table-filters-panel">
+      <div class="panel-head">
+        <h2>Filtros locais</h2>
+        <button type="button" (click)="clearFilters()">Limpar</button>
+      </div>
+      <div class="filters-grid">
+        <label>
+          Imobiliária
+          <select [ngModel]="filterSource()" (ngModelChange)="filterSource.set($event)">
+            <option value="">Todas</option>
+            @for (source of dicts()?.sources; track $index) {
+              <option [ngValue]="$index">{{ source }}</option>
+            }
+          </select>
+        </label>
+        <label>
+          Bairro
+          <select [ngModel]="filterNeighbourhood()" (ngModelChange)="filterNeighbourhood.set($event)">
+            <option value="">Todos</option>
+            @for (nb of dicts()?.neighbourhoods; track $index) {
+              <option [ngValue]="$index">{{ nb }}</option>
+            }
+          </select>
+        </label>
+        <label>
+          Tipo
+          <select [ngModel]="filterType()" (ngModelChange)="filterType.set($event)">
+            <option value="">Todos</option>
+            @for (type of dicts()?.types; track $index) {
+              <option [ngValue]="$index">{{ type }}</option>
+            }
+          </select>
+        </label>
+        <label>
+          Quartos (mín.)
+          <select [ngModel]="filterBedrooms()" (ngModelChange)="filterBedrooms.set($event)">
+            <option value="">Qualquer</option>
+            <option value="1">1+</option>
+            <option value="2">2+</option>
+            <option value="3">3+</option>
+          </select>
+        </label>
+        <label>
+          Mobiliado
+          <select [ngModel]="filterFurnished()" (ngModelChange)="filterFurnished.set($event)">
+            <option value="">Qualquer</option>
+            <option value="yes">Sim</option>
+            <option value="no">Não</option>
+          </select>
+        </label>
+        <label>
+          Pets
+          <select [ngModel]="filterPets()" (ngModelChange)="filterPets.set($event)">
+            <option value="">Qualquer</option>
+            <option value="yes">Aceita</option>
+            <option value="no">Não aceita</option>
+          </select>
+        </label>
+        <label>
+          Busca
+          <input type="search" placeholder="Rua, bairro, título..." [ngModel]="filterSearch()" (ngModelChange)="filterSearch.set($event)" />
+        </label>
+      </div>
+    </section>
+
+    <section class="table-layout">
+      <div class="panel chart-panel">
+        <div class="panel-head">
+          <h2>Distribuição por bairro</h2>
+          <p>{{ rows().length }} exibidos</p>
+        </div>
+        <div class="bar-chart">
+          @for (item of chart(); track item.name) {
+            <div class="bar-row">
+              <span class="bar-label">{{ item.name }}</span>
+              <span class="bar-count">{{ item.count }}</span>
+              <div class="bar-track"><div class="bar-fill" [style.width.%]="item.width"></div></div>
+            </div>
+          }
+        </div>
+      </div>
+
+      <div class="panel table-panel">
+        <div class="panel-head">
+          <h2>Imóveis</h2>
+          <label>
+            Ordenar por
+            <select [ngModel]="sortKey()" (ngModelChange)="sortKey.set($event)">
+              <option value="totalCost-asc">Menor total</option>
+              <option value="totalCost-desc">Maior total</option>
+              <option value="pricePerSqm-asc">Menor R$/m²</option>
+              <option value="pricePerSqm-desc">Maior R$/m²</option>
+              <option value="area-desc">Maior área</option>
+            </select>
+          </label>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Imóvel</th>
+                <th>Bairro</th>
+                <th>Total</th>
+                <th>Aluguel</th>
+                <th>m²</th>
+                <th>R$/m²</th>
+                <th>Q/V</th>
+                <th>Flags</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (row of rows(); track row.url) {
+                <tr>
+                  <td class="title-cell">
+                    <a [href]="row.url" target="_blank" rel="noopener noreferrer">{{ row.title }}</a>
+                    <div class="muted">{{ row.street || 'Endereço não informado' }}</div>
+                  </td>
+                  <td>{{ row.neighbourhood }}</td>
+                  <td><strong>{{ row.totalCost | brl }}</strong></td>
+                  <td>{{ row.rentPrice | brl }}</td>
+                  <td>{{ row.area ?? '—' }}</td>
+                  <td>{{ row.pricePerSqm ? (row.pricePerSqm | brl) : '—' }}</td>
+                  <td>{{ row.bedrooms }}/{{ row.parkingSpots }}</td>
+                  <td>
+                    <div class="flags">
+                      @if (row.isFurnished) { <span class="flag">Mobiliado</span> }
+                      @if (row.sourceLabel) { <span class="flag">{{ row.sourceLabel }}</span> }
+                      @if (row.acceptsPets) { <span class="flag">Pets</span> }
+                      @if (row.parkingSpots > 0) { <span class="flag">{{ row.parkingSpots }} vaga(s)</span> }
+                      @if (row.condoIptu >= 800) { <span class="flag warn">Condo+IPTU alto</span> }
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  }
+</main>

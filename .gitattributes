@@ -1,0 +1,2 @@
+web/public/db/** linguist-generated=true -diff
+data/raw/*.ndjson linguist-generated=true -diff

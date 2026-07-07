@@ -1,0 +1,175 @@
+[
+  {
+    "key": "cavalhada|50|2|1500|rua familia goncalves ca",
+    "count": 4,
+    "ids": [
+      "quintoandar:895433137",
+      "quintoandar:895433147",
+      "quintoandar:895432690",
+      "quintoandar:895433146"
+    ]
+  },
+  {
+    "key": "agronomia|55|2|1800|rua soldado jose da silv",
+    "count": 5,
+    "ids": [
+      "quintoandar:895533873",
+      "quintoandar:895533907",
+      "quintoandar:895533908",
+      "quintoandar:895533891",
+      "quintoandar:895533896"
+    ]
+  },
+  {
+    "key": "cavalhada|40|2|1400|rua familia goncalves ca",
+    "count": 6,
+    "ids": [
+      "quintoandar:895433144",
+      "quintoandar:895433149",
+      "quintoandar:895433118",
+      "quintoandar:895433151",
+      "quintoandar:895433140",
+      "quintoandar:895430706"
+    ]
+  },
+  {
+    "key": "rio branco|30|1|2500|rua miguel tostes",
+    "count": 3,
+    "ids": [
+      "quintoandar:895359729",
+      "quintoandar:895359727",
+      "quintoandar:895359724"
+    ]
+  },
+  {
+    "key": "independencia|24|1|2000|rua irmao jose otao",
+    "count": 5,
+    "ids": [
+      "quintoandar:895551814",
+      "quintoandar:895329745",
+      "quintoandar:895338415",
+      "quintoandar:895329751",
+      "quintoandar:895329749"
+    ]
+  },
+  {
+    "key": "cristo redentor|29|1|3150|rua caldas junior",
+    "count": 3,
+    "ids": [
+      "quintoandar:894827609",
+      "quintoandar:894827516",
+      "quintoandar:894827614"
+    ]
+  },
+  {
+    "key": "partenon|49|2|1800|avenida bento goncalves",
+    "count": 3,
+    "ids": [
+      "quintoandar:895533642",
+      "quintoandar:895533641",
+      "quintoandar:895533643"
+    ]
+  },
+  {
+    "key": "passo d’areia|40|1|2750|avenida joao wallig",
+    "count": 3,
+    "ids": [
+      "quintoandar:895375735",
+      "quintoandar:895406622",
+      "quintoandar:895375832"
+    ]
+  },
+  {
+    "key": "santana|40|1|1350|rua leopoldo bier 311",
+    "count": 3,
+    "ids": [
+      "auxiliadora-predial:823288",
+      "auxiliadora-predial:742944",
+      "auxiliadora-predial:742886"
+    ]
+  },
+  {
+    "key": "santana|50|1|2600|rua sao manoel, 1450",
+    "count": 3,
+    "ids": [
+      "guarida:25866",
+      "guarida:23656",
+      "guarida:23637"
+    ]
+  },
+  {
+    "key": "humaita|50|2|2350|rua airton ferreira da s",
+    "count": 3,
+    "ids": [
+      "guarida:18048",
+      "guarida:17507",
+      "guarida:17553"
+    ]
+  },
+  {
+    "key": "petropolis|72|2|3300|rua sao marcos, 210",
+    "count": 3,
+    "ids": [
+      "guarida:18222",
+      "guarida:24880",
+      "guarida:18208"
+    ]
+  },
+  {
+    "key": "partenon|48|1|2600|rua professor cristiano ",
+    "count": 5,
+    "ids": [
+      "guarida:18593",
+      "guarida:18514",
+      "guarida:18358",
+      "guarida:18582",
+      "guarida:18584"
+    ]
+  },
+  {
+    "key": "cidade baixa|37|1|2200|rua sarmento leite, 639",
+    "count": 3,
+    "ids": [
+      "guarida:21422",
+      "guarida:21424",
+      "guarida:19758"
+    ]
+  },
+  {
+    "key": "bom fim|25|1|2600|rua irmao jose otao, 97",
+    "count": 3,
+    "ids": [
+      "guarida:25840",
+      "guarida:25844",
+      "guarida:25843"
+    ]
+  },
+  {
+    "key": "centro historico|32|1|1200|rua vigario jose inacio,",
+    "count": 4,
+    "ids": [
+      "guarida:6710",
+      "guarida:6703",
+      "guarida:6709",
+      "guarida:6704"
+    ]
+  },
+  {
+    "key": "centro historico|35|1|1200|rua vigario jose inacio,",
+    "count": 3,
+    "ids": [
+      "guarida:6712",
+      "guarida:6713",
+      "guarida:6702"
+    ]
+  },
+  {
+    "key": "passo d`areia|30|1|3200|avenida joao wallig, 100",
+    "count": 3,
+    "ids": [
+      "guarida:24650",
+      "guarida:24649",
+      "guarida:24651"
+    ]
+  }
+]

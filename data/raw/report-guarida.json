@@ -1,0 +1,22 @@
+{
+  "source": "guarida",
+  "city": "Porto Alegre",
+  "state": "RS",
+  "filter": {
+    "minTotalCost": 1500,
+    "maxTotalCost": 5000
+  },
+  "startedAt": "2026-07-07T16:13:47.561Z",
+  "resumed": false,
+  "reportedTotal": 1294,
+  "pagesFetched": 87,
+  "collected": 848,
+  "discarded": {
+    "city": 0,
+    "cost": 0,
+    "duplicate": 0
+  },
+  "errors": [],
+  "finishedAt": "2026-07-07T16:14:58.941Z",
+  "completed": true
+}
