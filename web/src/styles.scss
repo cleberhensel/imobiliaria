@@ -1159,6 +1159,7 @@ app-listing-card {
   pointer-events: none;
 }
 
+.card.card-data-collapsed:not(.gallery-focus) .gallery-controls,
 .card.gallery-focus .gallery-controls {
   height: auto;
   bottom: 0;
