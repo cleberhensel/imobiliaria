@@ -1,6 +1,58 @@
 <div class="app" [class.sidebar-collapsed]="state.sidebarCollapsed()">
   <aside class="sidebar" id="sidebar">
-    <section class="sidebar-block sidebar-block-first">
+    <div class="sidebar-head">
+      <button
+        type="button"
+        class="sidebar-toggle-btn"
+        (click)="state.toggleSidebar()"
+        aria-label="Recolher filtros"
+        title="Recolher"
+      >
+        <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+          <path d="M15 6l-6 6 6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    </div>
+
+    <section class="sidebar-block favourites-block sidebar-block-first">
+      <div class="block-head">
+        <h2>Favoritos</h2>
+        @if (state.favoriteCount()) {
+          <button type="button" class="text-btn" (click)="state.clearFavorites()">Limpar</button>
+        }
+      </div>
+      @if (state.favoriteCount()) {
+        <button
+          type="button"
+          class="favourites-view-btn"
+          [class.active]="state.resultsView() === 'favorites'"
+          (click)="state.setResultsView('favorites')"
+        >
+          Ver {{ state.favoriteCount() }} favorito(s)
+        </button>
+        <ul class="favourites-list">
+          @for (item of state.favoriteListings(); track item.id) {
+            <li>
+              <button type="button" class="favourites-item" (click)="openDetail(item.id)">
+                <span class="favourites-item-address">{{ logradouro(item) }}</span>
+                <span class="favourites-item-meta">{{ item.neighbourhood || 'Sem bairro' }} · {{ formatMoney(item.totalCost) }}</span>
+              </button>
+              <button
+                type="button"
+                class="favourites-remove"
+                (click)="state.toggleFavorite(item.id)"
+                aria-label="Remover dos favoritos"
+                title="Remover"
+              >×</button>
+            </li>
+          }
+        </ul>
+      } @else {
+        <p class="favourites-empty">Use o coração nos cards para salvar imóveis aqui.</p>
+      }
+    </section>
+
+    <section class="sidebar-block">
       <h2>Perfil de busca</h2>
       <div class="preset-row">
         <button type="button" class="preset" [class.active]="state.preset() === 'focus'" (click)="onPreset('focus')">Foco total</button>
@@ -116,16 +168,21 @@
   </aside>
 
   <main class="workspace">
-    <button
-      type="button"
-      class="sidebar-toggle"
-      (click)="state.toggleSidebar()"
-      [attr.aria-expanded]="!state.sidebarCollapsed()"
-      aria-controls="sidebar"
-    >
-      <span class="sidebar-toggle-icon" aria-hidden="true">{{ state.sidebarCollapsed() ? '›' : '‹' }}</span>
-      <span>{{ state.sidebarCollapsed() ? 'Filtros' : 'Recolher' }}</span>
-    </button>
+    @if (state.sidebarCollapsed()) {
+      <button
+        type="button"
+        class="sidebar-toggle-btn sidebar-toggle-btn--workspace"
+        (click)="state.toggleSidebar()"
+        [attr.aria-expanded]="false"
+        aria-controls="sidebar"
+        aria-label="Abrir filtros"
+        title="Filtros"
+      >
+        <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
+          <path d="M9 6l6 6-6 6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    }
 
     @if (state.statusError()) {
       <div class="status-banner error">{{ state.statusMessage() }}</div>
@@ -143,6 +200,28 @@
 
       <section class="results-head" id="results-head">
         <div>
+          <div class="results-view-tabs">
+            <button
+              type="button"
+              class="results-view-tab"
+              [class.active]="state.resultsView() === 'all'"
+              (click)="state.setResultsView('all')"
+            >
+              Explorar
+            </button>
+            <button
+              type="button"
+              class="results-view-tab"
+              [class.active]="state.resultsView() === 'favorites'"
+              [disabled]="!state.favoriteCount()"
+              (click)="state.setResultsView('favorites')"
+            >
+              Favoritos
+              @if (state.favoriteCount()) {
+                <span class="results-view-count">{{ state.favoriteCount() }}</span>
+              }
+            </button>
+          </div>
           <h2 id="results-title">{{ resultsTitle() }}</h2>
           <p id="results-subtitle">{{ resultsSubtitle() }}</p>
         </div>
@@ -180,11 +259,16 @@
         </div>
       </section>
 
-      @if (state.filtered().length) {
+      @if (state.displayedListings().length) {
         <section class="cards" id="cards">
-          @for (item of state.filtered(); track item.id) {
+          @for (item of state.displayedListings(); track item.id) {
             <app-listing-card [item]="item" (openDetail)="openDetail($event)" />
           }
+        </section>
+      } @else if (state.resultsView() === 'favorites') {
+        <section class="empty" id="empty">
+          <h3>Nenhum favorito ainda</h3>
+          <p>Clique no coração nos cards para guardar imóveis que você quer revisar depois.</p>
         </section>
       } @else {
         <section class="empty" id="empty">
@@ -298,6 +382,14 @@
           }
 
           <div class="detail-actions">
+            <button
+              type="button"
+              class="detail-action favourite"
+              [class.active]="state.isFavorite(item.id)"
+              (click)="state.toggleFavorite(item.id)"
+            >
+              {{ state.isFavorite(item.id) ? 'Remover dos favoritos' : 'Adicionar aos favoritos' }}
+            </button>
             <a class="detail-action primary" [href]="item.url" target="_blank" rel="noopener noreferrer">Abrir anúncio</a>
           </div>
         </div>

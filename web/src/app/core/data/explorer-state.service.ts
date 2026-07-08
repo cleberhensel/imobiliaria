@@ -50,6 +50,8 @@ export class ExplorerState {
   readonly sortKey = signal<SortKey>('fit-desc');
   readonly view = signal<'cards' | 'compact'>('cards');
   readonly pinned = signal<Set<string>>(new Set());
+  readonly favoriteIds = signal<string[]>(this.persistence.loadFavoriteIds());
+  readonly resultsView = signal<'all' | 'favorites'>('all');
   readonly photoIndexById = signal<Map<string, number>>(new Map());
   readonly galleryExpandedById = signal<Map<string, boolean>>(new Map());
   readonly cardDataExpandedById = signal<Map<string, boolean>>(new Map());
@@ -73,6 +75,19 @@ export class ExplorerState {
 
   readonly compareCount = computed(() => this.pinned().size);
   readonly compareEnabled = computed(() => this.pinned().size >= 2);
+
+  readonly favoriteListings = computed(() => {
+    const byId = new Map(this.enriched().map((item) => [item.id, item]));
+    return this.favoriteIds()
+      .map((id) => byId.get(id))
+      .filter((item): item is ExplorerListing => Boolean(item));
+  });
+
+  readonly favoriteCount = computed(() => this.favoriteListings().length);
+
+  readonly displayedListings = computed(() => (
+    this.resultsView() === 'favorites' ? this.favoriteListings() : this.filtered()
+  ));
 
   readonly neighbourhoodMedianHousingPpmByKey = computed(() => (
     buildNeighbourhoodMedianHousingPpm(this.enriched())
@@ -253,6 +268,40 @@ export class ExplorerState {
 
   clearPins(): void {
     this.pinned.set(new Set());
+  }
+
+  isFavorite(id: string): boolean {
+    return this.favoriteIds().includes(id);
+  }
+
+  toggleFavorite(id: string): boolean {
+    const current = this.favoriteIds();
+    if (current.includes(id)) {
+      const next = current.filter((entry) => entry !== id);
+      this.favoriteIds.set(next);
+      this.persistence.saveFavoriteIds(next);
+      if (!next.length && this.resultsView() === 'favorites') {
+        this.resultsView.set('all');
+      }
+      return false;
+    }
+    const next = [id, ...current];
+    this.favoriteIds.set(next);
+    this.persistence.saveFavoriteIds(next);
+    return true;
+  }
+
+  clearFavorites(): void {
+    this.favoriteIds.set([]);
+    this.persistence.saveFavoriteIds([]);
+    if (this.resultsView() === 'favorites') {
+      this.resultsView.set('all');
+    }
+  }
+
+  setResultsView(view: 'all' | 'favorites'): void {
+    if (view === 'favorites' && !this.favoriteCount()) return;
+    this.resultsView.set(view);
   }
 
   getPhotoIndex(id: string): number {

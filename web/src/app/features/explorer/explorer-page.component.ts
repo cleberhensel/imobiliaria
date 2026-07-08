@@ -41,7 +41,12 @@ export class ExplorerPageComponent implements OnInit {
 
   readonly tierEntries = Object.entries(TIERS) as [keyof typeof TIERS, (typeof TIERS)[keyof typeof TIERS]][];
 
-  readonly resultsTitle = computed(() => `${this.state.filtered().length} imóveis no recorte`);
+  readonly resultsTitle = computed(() => {
+    if (this.state.resultsView() === 'favorites') {
+      return `${this.state.favoriteCount()} favorito(s)`;
+    }
+    return `${this.state.filtered().length} imóveis no recorte`;
+  });
 
   readonly funnelSteps = computed(() => {
     const all = this.state.enriched();
@@ -60,6 +65,12 @@ export class ExplorerPageComponent implements OnInit {
   });
 
   readonly resultsSubtitle = computed(() => {
+    if (this.state.resultsView() === 'favorites') {
+      const favorites = this.state.favoriteListings();
+      if (!favorites.length) return 'Salve imóveis clicando no coração nos cards.';
+      const avg = average(favorites.map((item) => item.totalCost));
+      return `Média total ${formatBrl(avg)} · lista salva neste navegador`;
+    }
     const filtered = this.state.filtered();
     if (!filtered.length) return 'Ajuste bairros, centralidade ou imobiliária.';
     const avg = average(filtered.map((item) => item.totalCost));

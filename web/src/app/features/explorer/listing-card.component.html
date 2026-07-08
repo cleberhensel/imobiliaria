@@ -4,6 +4,7 @@
   [class.adherence-partial]="!item.matchesAllPriorities && (item.matchedCount || 0) > 0"
   [class.gallery-focus]="galleryExpanded"
   [class.card-data-collapsed]="!cardDataExpanded"
+  [class.is-favorite]="isFavorite"
   [attr.data-listing-id]="item.id"
 >
   <div class="card-media">
@@ -23,12 +24,35 @@
   </div>
 
   @if (hasNav) {
-    <span class="gallery-counter glass-control">{{ photoIndex + 1 }}/{{ photos.length }}</span>
     <div class="gallery-controls" aria-hidden="false">
       <button type="button" class="gallery-nav prev" (click)="onPrev($event)" aria-label="Foto anterior">‹</button>
       <button type="button" class="gallery-nav next" (click)="onNext($event)" aria-label="Próxima foto">›</button>
     </div>
   }
+
+  <div class="card-top-badges">
+    @if (hasNav) {
+      <span class="gallery-counter glass-control">{{ photoIndex + 1 }}/{{ photos.length }}</span>
+    }
+    <button
+      type="button"
+      class="favorite-btn glass-control"
+      [class.active]="isFavorite"
+      (click)="onToggleFavorite($event)"
+      [attr.aria-label]="isFavorite ? 'Remover dos favoritos' : 'Adicionar aos favoritos'"
+      [attr.title]="isFavorite ? 'Remover dos favoritos' : 'Favoritar'"
+    >
+      <svg viewBox="0 0 24 24" width="15" height="15" aria-hidden="true">
+        <path
+          d="M12 20.5l-1.05-.96C5.4 14.36 2 11.28 2 7.5 2 4.42 4.42 2 7.5 2c1.74 0 3.41.81 4.5 2.09C13.09 2.81 14.76 2 16.5 2 19.58 2 22 4.42 22 7.5c0 3.78-3.4 6.86-8.95 12.04L12 20.5z"
+          [attr.fill]="isFavorite ? 'currentColor' : 'none'"
+          stroke="currentColor"
+          stroke-width="1.6"
+          stroke-linejoin="round"
+        />
+      </svg>
+    </button>
+  </div>
 
   @if (cardDataExpanded && !galleryExpanded) {
     <div class="card-data-sheet glass-panel">

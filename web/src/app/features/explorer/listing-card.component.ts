@@ -20,6 +20,7 @@ export class ListingCardComponent {
   get score() { return this.item.adherenceScore ?? this.item.fitScore; }
   get galleryExpanded() { return this.state.isGalleryExpanded(this.item.id); }
   get cardDataExpanded() { return this.state.isCardDataExpanded(this.item.id); }
+  get isFavorite() { return this.state.isFavorite(this.item.id); }
 
   get adherenceClass(): string {
     if (this.item.matchesAllPriorities) return 'adherence-high';
@@ -138,6 +139,12 @@ export class ListingCardComponent {
       this.state.setGalleryExpanded(this.item.id, false);
     }
     this.state.setCardDataExpanded(this.item.id, true);
+  }
+
+  onToggleFavorite(event: Event): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.state.toggleFavorite(this.item.id);
   }
 
   private navigatePhoto(delta: number): void {
