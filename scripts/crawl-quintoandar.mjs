@@ -10,7 +10,13 @@ const root = path.resolve(__dirname, '..');
 const config = await readConfig(path.join(root, 'config', 'filters.json'));
 const { fresh } = parseCliFlags();
 
-console.log(`Coletando QuintoAndar — ${formatConfigSummary(config)}${fresh ? ' (fresh)' : ''}`);
+const qa = config.sources?.quintoandar || {};
+const qaExtra = [
+  qa.houseTypes?.length ? `tipos=${qa.houseTypes.join(',')}` : null,
+  qa.minBedrooms ? `≥${qa.minBedrooms}q` : null,
+  qa.minArea ? `≥${qa.minArea}m²` : null,
+].filter(Boolean).join(' · ');
+console.log(`Coletando QuintoAndar — ${formatConfigSummary(config)}${qaExtra ? ` · ${qaExtra}` : ''}${fresh ? ' (fresh)' : ''}`);
 
 const { report, ndjsonPath } = await runCrawl({
   root,

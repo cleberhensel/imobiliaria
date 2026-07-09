@@ -6,18 +6,18 @@
     "minTotalCost": 1500,
     "maxTotalCost": 5000
   },
-  "collectedAt": "2026-07-07T16:15:08.020Z",
-  "count": 2750,
+  "collectedAt": "2026-07-09T20:12:34.022Z",
+  "count": 2227,
   "sources": [
     {
       "id": "quintoandar",
       "label": "QuintoAndar",
-      "count": 958
+      "count": 433
     },
     {
       "id": "auxiliadora-predial",
       "label": "Auxiliadora Predial",
-      "count": 984
+      "count": 986
     },
     {
       "id": "guarida",
@@ -28,7 +28,7 @@
   "shards": {
     "lite": {
       "size": 128,
-      "count": 22,
+      "count": 18,
       "files": [
         "lite/shard-000.json",
         "lite/shard-001.json",
@@ -47,16 +47,12 @@
         "lite/shard-014.json",
         "lite/shard-015.json",
         "lite/shard-016.json",
-        "lite/shard-017.json",
-        "lite/shard-018.json",
-        "lite/shard-019.json",
-        "lite/shard-020.json",
-        "lite/shard-021.json"
+        "lite/shard-017.json"
       ]
     },
     "detail": {
       "size": 64,
-      "count": 43,
+      "count": 35,
       "files": [
         "detail/shard-000.json",
         "detail/shard-001.json",
@@ -92,17 +88,9 @@
         "detail/shard-031.json",
         "detail/shard-032.json",
         "detail/shard-033.json",
-        "detail/shard-034.json",
-        "detail/shard-035.json",
-        "detail/shard-036.json",
-        "detail/shard-037.json",
-        "detail/shard-038.json",
-        "detail/shard-039.json",
-        "detail/shard-040.json",
-        "detail/shard-041.json",
-        "detail/shard-042.json"
+        "detail/shard-034.json"
       ]
     }
   },
-  "buildHash": "a5c760119a05"
+  "buildHash": "0b2b481dd3c4"
 }

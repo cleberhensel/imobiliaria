@@ -6,17 +6,17 @@
     "minTotalCost": 1500,
     "maxTotalCost": 5000
   },
-  "startedAt": "2026-07-07T16:09:35.309Z",
+  "startedAt": "2026-07-09T19:44:07.320Z",
   "resumed": false,
-  "reportedTotal": 3425,
-  "pagesFetched": 156,
-  "collected": 1000,
+  "reportedTotal": 1348,
+  "pagesFetched": 70,
+  "collected": 446,
   "discarded": {
     "city": 0,
     "cost": 0,
     "duplicate": 0
   },
   "errors": [],
-  "finishedAt": "2026-07-07T16:12:41.587Z",
+  "finishedAt": "2026-07-09T19:47:38.724Z",
   "completed": true
 }

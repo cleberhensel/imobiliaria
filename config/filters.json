@@ -4,10 +4,14 @@
   "minTotalCost": 1500,
   "maxTotalCost": 5000,
   "defaults": {
-    "maxListingsPerSource": 1000
+    "maxListingsPerSource": null
   },
   "sources": {
-    "quintoandar": {},
+    "quintoandar": {
+      "houseTypes": ["APARTMENT"],
+      "minBedrooms": 2,
+      "minArea": 50
+    },
     "auxiliadora-predial": {},
     "guarida": {}
   }

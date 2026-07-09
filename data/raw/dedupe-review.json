@@ -1,82 +1,23 @@
 [
   {
-    "key": "cavalhada|50|2|1500|rua familia goncalves ca",
+    "key": "agronomia|55|2|1800|rua soldado jose da silv",
     "count": 4,
     "ids": [
-      "quintoandar:895433137",
-      "quintoandar:895433147",
-      "quintoandar:895432690",
-      "quintoandar:895433146"
-    ]
-  },
-  {
-    "key": "agronomia|55|2|1800|rua soldado jose da silv",
-    "count": 5,
-    "ids": [
       "quintoandar:895533873",
-      "quintoandar:895533907",
-      "quintoandar:895533908",
+      "quintoandar:895533910",
       "quintoandar:895533891",
       "quintoandar:895533896"
     ]
   },
   {
-    "key": "cavalhada|40|2|1400|rua familia goncalves ca",
-    "count": 6,
-    "ids": [
-      "quintoandar:895433144",
-      "quintoandar:895433149",
-      "quintoandar:895433118",
-      "quintoandar:895433151",
-      "quintoandar:895433140",
-      "quintoandar:895430706"
-    ]
-  },
-  {
-    "key": "rio branco|30|1|2500|rua miguel tostes",
-    "count": 3,
-    "ids": [
-      "quintoandar:895359729",
-      "quintoandar:895359727",
-      "quintoandar:895359724"
-    ]
-  },
-  {
-    "key": "independencia|24|1|2000|rua irmao jose otao",
+    "key": "cavalhada|50|2|1500|rua familia goncalves ca",
     "count": 5,
     "ids": [
-      "quintoandar:895551814",
-      "quintoandar:895329745",
-      "quintoandar:895338415",
-      "quintoandar:895329751",
-      "quintoandar:895329749"
-    ]
-  },
-  {
-    "key": "cristo redentor|29|1|3150|rua caldas junior",
-    "count": 3,
-    "ids": [
-      "quintoandar:894827609",
-      "quintoandar:894827516",
-      "quintoandar:894827614"
-    ]
-  },
-  {
-    "key": "partenon|49|2|1800|avenida bento goncalves",
-    "count": 3,
-    "ids": [
-      "quintoandar:895533642",
-      "quintoandar:895533641",
-      "quintoandar:895533643"
-    ]
-  },
-  {
-    "key": "passo d’areia|40|1|2750|avenida joao wallig",
-    "count": 3,
-    "ids": [
-      "quintoandar:895375735",
-      "quintoandar:895406622",
-      "quintoandar:895375832"
+      "quintoandar:895433137",
+      "quintoandar:895433147",
+      "quintoandar:895432690",
+      "quintoandar:895433146",
+      "quintoandar:895432693"
     ]
   },
   {

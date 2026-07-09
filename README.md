@@ -13,18 +13,19 @@ Todos os limites e filtros ficam num único arquivo:
   "minTotalCost": 1500,
   "maxTotalCost": 5000,
   "defaults": {
-    "maxListingsPerSource": 1000
+    "maxListingsPerSource": null
   },
   "sources": {
     "quintoandar": {},
     "auxiliadora-predial": {},
-    "guarida": { "maxListings": 500 }
+    "guarida": {}
   }
 }
 ```
 
-- `defaults.maxListingsPerSource` — limite global por imobiliária (atual: **1000**)
+- `defaults.maxListingsPerSource` — limite global por imobiliária (`null` = sem limite)
 - `sources.{fonte}.maxListings` — override individual por fonte
+- `sources.quintoandar.houseTypes` / `minBedrooms` / `minArea` — recorte da coleta QuintoAndar
 - `minTotalCost` / `maxTotalCost` — faixa de custo total mensal
 
 ## Fluxo operacional

@@ -2,86 +2,58 @@
   "byNeighbourhood": [
     {
       "name": "Centro Histórico",
-      "count": 248
+      "count": 183
     },
     {
       "name": "Petrópolis",
-      "count": 164
+      "count": 140
     },
     {
       "name": "Partenon",
-      "count": 112
+      "count": 94
     },
     {
       "name": "Cidade Baixa",
-      "count": 110
+      "count": 91
     },
     {
       "name": "Menino Deus",
-      "count": 95
-    },
-    {
-      "name": "Rio Branco",
-      "count": 88
-    },
-    {
-      "name": "Sarandi",
-      "count": 77
+      "count": 81
     },
     {
       "name": "Santana",
-      "count": 77
+      "count": 73
     },
     {
       "name": "Humaitá",
-      "count": 67
+      "count": 68
     },
     {
-      "name": "Tristeza",
+      "name": "Rio Branco",
+      "count": 68
+    },
+    {
+      "name": "Sarandi",
       "count": 58
     },
     {
+      "name": "Tristeza",
+      "count": 53
+    },
+    {
       "name": "Jardim Botânico",
-      "count": 52
+      "count": 48
     },
     {
       "name": "Teresópolis",
-      "count": 51
-    },
-    {
-      "name": "Auxiliadora",
-      "count": 51
-    },
-    {
-      "name": "Azenha",
-      "count": 49
-    },
-    {
-      "name": "Cristo Redentor",
-      "count": 49
-    },
-    {
-      "name": "Vila Ipiranga",
-      "count": 47
-    },
-    {
-      "name": "Boa Vista",
-      "count": 47
-    },
-    {
-      "name": "Cristal",
-      "count": 46
-    },
-    {
-      "name": "Independência",
       "count": 45
     },
     {
-      "name": "Bom Fim",
-      "count": 43
+      "name": "Auxiliadora",
+      "count": 45
     },
     {
-      "name": "Bela Vista",
+      "name": "Cristo Redentor",
       "count": 43
     },
     {
@@ -93,79 +65,99 @@
       "count": 40
     },
     {
-      "name": "Jardim do Salso",
+      "name": "Cristal",
       "count": 39
     },
     {
-      "name": "Passo da Areia",
+      "name": "Vila Ipiranga",
+      "count": 38
+    },
+    {
+      "name": "Bom Fim",
+      "count": 38
+    },
+    {
+      "name": "Bela Vista",
       "count": 37
     },
     {
-      "name": "Floresta",
+      "name": "Passo da Areia",
       "count": 36
     },
     {
-      "name": "Moinhos de Vento",
+      "name": "Azenha",
       "count": 36
     },
     {
-      "name": "Cavalhada",
+      "name": "Boa Vista",
       "count": 35
     },
     {
-      "name": "Vila Nova",
-      "count": 33
+      "name": "Moinhos de Vento",
+      "count": 34
     },
     {
       "name": "Higienópolis",
-      "count": 33
-    },
-    {
-      "name": "Jardim Carvalho",
       "count": 32
     },
     {
-      "name": "Morro Santana",
+      "name": "Floresta",
       "count": 31
     },
     {
-      "name": "Farroupilha",
-      "count": 30
+      "name": "Independência",
+      "count": 31
     },
     {
-      "name": "Santo Antônio",
+      "name": "Jardim Carvalho",
       "count": 30
     },
     {
       "name": "Praia de Belas",
+      "count": 28
+    },
+    {
+      "name": "Vila Nova",
       "count": 27
     },
     {
-      "name": "Hípica",
+      "name": "Cavalhada",
       "count": 27
     },
     {
-      "name": "São João",
+      "name": "Jardim do Salso",
       "count": 26
-    },
-    {
-      "name": "Nonoai",
-      "count": 25
     },
     {
       "name": "Chácara das Pedras",
       "count": 24
     },
     {
-      "name": "São Geraldo",
-      "count": 23
+      "name": "Santo Antônio",
+      "count": 24
     },
     {
-      "name": "Jardim Itu",
+      "name": "Nonoai",
+      "count": 24
+    },
+    {
+      "name": "São Geraldo",
+      "count": 22
+    },
+    {
+      "name": "Morro Santana",
+      "count": 21
+    },
+    {
+      "name": "São João",
+      "count": 21
+    },
+    {
+      "name": "São Sebastião",
       "count": 20
     },
     {
-      "name": "Medianeira",
+      "name": "Hípica",
       "count": 19
     },
     {
@@ -177,139 +169,107 @@
       "count": 18
     },
     {
-      "name": "Camaquã",
-      "count": 17
-    },
-    {
-      "name": "Parque Santa Fé",
-      "count": 17
-    },
-    {
-      "name": "São Sebastião",
-      "count": 17
-    },
-    {
-      "name": "Rubem Berta",
-      "count": 16
-    },
-    {
       "name": "Ipanema",
       "count": 16
     },
     {
-      "name": "Passo D’areia",
+      "name": "Jardim Lindóia",
       "count": 16
     },
     {
-      "name": "Restinga",
+      "name": "Jardim Itu",
       "count": 15
     },
     {
-      "name": "Jardim Lindóia",
+      "name": "Medianeira",
       "count": 15
     },
     {
-      "name": "Glória",
+      "name": "Farroupilha",
       "count": 15
     },
     {
-      "name": "Jardim Europa",
+      "name": "Parque Santa Fé",
       "count": 13
     },
     {
-      "name": "Vila Jardim",
-      "count": 12
-    },
-    {
       "name": "Jardim Sabará",
+      "count": 13
+    },
+    {
+      "name": "Jardim Europa",
       "count": 12
     },
     {
-      "name": "Agronomia",
-      "count": 11
-    },
-    {
-      "name": "Protásio Alves",
-      "count": 11
-    },
-    {
-      "name": "Santa Tereza",
-      "count": 11
+      "name": "Camaquã",
+      "count": 12
     },
     {
       "name": "Mont Serrat",
       "count": 11
     },
     {
-      "name": "Três Figueiras",
+      "name": "Agronomia",
+      "count": 10
+    },
+    {
+      "name": "Glória",
       "count": 10
     },
     {
       "name": "Bom Jesus",
-      "count": 10
-    },
-    {
-      "name": "Campo Novo",
       "count": 9
     },
     {
-      "name": "Passo das Pedras",
-      "count": 9
+      "name": "Vila Jardim",
+      "count": 8
     },
     {
       "name": "Farrapos",
-      "count": 9
-    },
-    {
-      "name": "Aberta dos Morros",
-      "count": 9
-    },
-    {
-      "name": "Mário Quintana",
       "count": 8
-    },
-    {
-      "name": "Navegantes",
-      "count": 8
-    },
-    {
-      "name": "Guarujá",
-      "count": 8
-    },
-    {
-      "name": "Santa Maria Goretti",
-      "count": 8
-    },
-    {
-      "name": "Passo d’Areia",
-      "count": 8
-    },
-    {
-      "name": "Costa E Silva",
-      "count": 7
     },
     {
       "name": "Jardim Leopoldina",
       "count": 7
     },
     {
-      "name": "Jardim Dona Leopoldina",
+      "name": "Restinga",
       "count": 6
     },
     {
-      "name": "São José",
+      "name": "Navegantes",
       "count": 6
     },
     {
-      "name": "Mont’serrat",
+      "name": "Passo das Pedras",
       "count": 6
     },
     {
-      "name": "Lomba do Pinheiro",
+      "name": "Três Figueiras",
+      "count": 6
+    },
+    {
+      "name": "Santa Maria Goretti",
+      "count": 6
+    },
+    {
+      "name": "Rubem Berta",
       "count": 5
     },
     {
-      "name": "Santa Rosa de Lima",
+      "name": "Guarujá",
+      "count": 5
+    },
+    {
+      "name": "Passo D’areia",
+      "count": 5
+    },
+    {
+      "name": "Aberta dos Morros",
+      "count": 5
+    },
+    {
+      "name": "Santa Cecília",
       "count": 5
     },
     {
@@ -321,15 +281,15 @@
       "count": 5
     },
     {
-      "name": "Niterói",
+      "name": "Campo Novo",
       "count": 4
     },
     {
-      "name": "Belém Novo",
+      "name": "Protásio Alves",
       "count": 4
     },
     {
-      "name": "Espírito Santo",
+      "name": "Santa Tereza",
       "count": 4
     },
     {
@@ -341,18 +301,6 @@
       "count": 3
     },
     {
-      "name": "Santa Fe",
-      "count": 3
-    },
-    {
-      "name": "Vila Joao Pessoa",
-      "count": 3
-    },
-    {
-      "name": "Santa Cecília",
-      "count": 3
-    },
-    {
       "name": "Mont&#039;Serrat",
       "count": 3
     },
@@ -361,23 +309,15 @@
       "count": 2
     },
     {
-      "name": "Jardim Itu-sabará",
+      "name": "Niterói",
       "count": 2
     },
     {
-      "name": "Jardim Floresta",
+      "name": "Mário Quintana",
       "count": 2
     },
     {
       "name": "Jardim São Pedro",
-      "count": 2
-    },
-    {
-      "name": "Cecília",
-      "count": 2
-    },
-    {
-      "name": "Ponta Grossa",
       "count": 2
     },
     {
@@ -389,11 +329,11 @@
       "count": 2
     },
     {
-      "name": "Vila João Pessoa",
+      "name": "Costa e Silva",
       "count": 2
     },
     {
-      "name": "Fátima",
+      "name": "Costa E Silva",
       "count": 2
     },
     {
@@ -405,10 +345,6 @@
       "count": 2
     },
     {
-      "name": "Mont’Serrat",
-      "count": 2
-    },
-    {
       "name": "Central Parque",
       "count": 2
     },
@@ -417,19 +353,23 @@
       "count": 2
     },
     {
-      "name": "Planalto",
+      "name": "Vila Imbui",
       "count": 1
     },
     {
-      "name": "Jardim Algarve",
+      "name": "Lomba do Pinheiro",
       "count": 1
     },
     {
-      "name": "Petropolis",
+      "name": "Jardim Dona Leopoldina",
       "count": 1
     },
     {
-      "name": "Restinga velha",
+      "name": "Ponta Grossa",
+      "count": 1
+    },
+    {
+      "name": "São José",
       "count": 1
     },
     {
@@ -437,15 +377,31 @@
       "count": 1
     },
     {
-      "name": "Costa e Silva",
+      "name": "Jardim Itu-sabará",
       "count": 1
     },
     {
-      "name": "Chapéu Do Sol",
+      "name": "Mont’serrat",
       "count": 1
     },
     {
       "name": "Sao Sebastiao",
+      "count": 1
+    },
+    {
+      "name": "Vila João Pessoa",
+      "count": 1
+    },
+    {
+      "name": "Jardim Itu Planalto",
+      "count": 1
+    },
+    {
+      "name": "Jardim Floresta",
+      "count": 1
+    },
+    {
+      "name": "Santa Fe",
       "count": 1
     },
     {
@@ -457,7 +413,7 @@
       "count": 1
     },
     {
-      "name": "Paternon",
+      "name": " Bela Vista",
       "count": 1
     },
     {
@@ -465,19 +421,7 @@
       "count": 1
     },
     {
-      "name": "Vl Sto Agostinho",
-      "count": 1
-    },
-    {
-      "name": "Serraria",
-      "count": 1
-    },
-    {
-      "name": "Coronel Aparicio Borges",
-      "count": 1
-    },
-    {
-      "name": "Sétimo Céu",
+      "name": "Passo d’Areia",
       "count": 1
     },
     {
@@ -488,23 +432,23 @@
   "totalCost": {
     "min": 1501,
     "max": 5000,
-    "avg": 3180
+    "avg": 3250
   },
   "area": {
-    "min": 12,
-    "max": 530,
+    "min": 20,
+    "max": 321,
     "avg": 65
   },
   "pricePerSqm": {
-    "min": 5.79,
-    "max": 255.25,
-    "avg": 60
+    "min": 10.84,
+    "max": 194.31,
+    "avg": 58
   },
-  "furnished": 1520,
-  "acceptsPets": 1582,
-  "withParking": 1637,
-  "apartments": 2258,
-  "central": 2251,
-  "withBalcony": 478,
-  "withSun": 703
+  "furnished": 1272,
+  "acceptsPets": 1167,
+  "withParking": 1334,
+  "apartments": 1965,
+  "central": 1869,
+  "withBalcony": 404,
+  "withSun": 342
 }
