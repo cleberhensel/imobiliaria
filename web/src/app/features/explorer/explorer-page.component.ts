@@ -72,11 +72,14 @@ export class ExplorerPageComponent implements OnInit {
       return `Média total ${formatBrl(avg)} · lista salva neste navegador`;
     }
     const filtered = this.state.filtered();
-    if (!filtered.length) return 'Ajuste bairros, centralidade ou imobiliária.';
+    if (!filtered.length) return 'Ajuste bairros, valor, centralidade ou imobiliária.';
     const avg = average(filtered.map((item) => item.totalCost));
     const avgFit = average(filtered.map((item) => item.adherenceScore ?? item.fitScore));
     const high = filtered.filter((item) => item.matchesAllPriorities).length;
-    return `Média total ${formatBrl(avg)} · aderência média ${Math.round(avgFit)}% · ${high} com match total · ${this.presetLabel()}`;
+    const costHint = this.state.costRangeActive()
+      ? ` · ${formatBrl(this.state.minTotalCost())}–${formatBrl(this.state.maxTotalCost())}`
+      : '';
+    return `Média total ${formatBrl(avg)} · aderência média ${Math.round(avgFit)}% · ${high} com match total · ${this.presetLabel()}${costHint}`;
   });
 
   async ngOnInit(): Promise<void> {

@@ -52,6 +52,9 @@ export class ExplorerState {
   readonly pinned = signal<Set<string>>(new Set());
   readonly favoriteIds = signal<string[]>(this.persistence.loadFavoriteIds());
   readonly resultsView = signal<'all' | 'favorites'>('all');
+  readonly costBounds = signal<{ min: number; max: number }>({ min: 1500, max: 5000 });
+  readonly minTotalCost = signal(1500);
+  readonly maxTotalCost = signal(5000);
   readonly photoIndexById = signal<Map<string, number>>(new Map());
   readonly galleryExpandedById = signal<Map<string, boolean>>(new Map());
   readonly cardDataExpandedById = signal<Map<string, boolean>>(new Map());
@@ -62,15 +65,23 @@ export class ExplorerState {
     const tier = this.selectedTier();
     const neighbourhoods = this.selectedNeighbourhoods();
     const sources = this.selectedSources();
+    const minCost = this.minTotalCost();
+    const maxCost = this.maxTotalCost();
 
     if (tier) items = items.filter((item) => item.tier === tier);
     if (neighbourhoods.size) {
       items = items.filter((item) => neighbourhoods.has(item.neighbourhood || 'Sem bairro'));
     }
     if (sources.size) items = items.filter((item) => sources.has(item.source));
+    items = items.filter((item) => item.totalCost >= minCost && item.totalCost <= maxCost);
 
     const scored = items.map((item) => computeAdherence(item, this.priorities()));
     return sortListings(scored, this.sortKey());
+  });
+
+  readonly costRangeActive = computed(() => {
+    const bounds = this.costBounds();
+    return this.minTotalCost() > bounds.min || this.maxTotalCost() < bounds.max;
   });
 
   readonly compareCount = computed(() => this.pinned().size);
@@ -117,6 +128,7 @@ export class ExplorerState {
 
       const listings = await this.loadAllDetails(manifest, dicts);
       this.enriched.set(listings);
+      this.initCostRange(manifest, listings);
       this.restoreNeighbourhoodSelection();
       this.applyPreset('focus');
       this.setStatus('');
@@ -195,6 +207,41 @@ export class ExplorerState {
 
   markCustomPreset(): void {
     this.preset.set('custom');
+  }
+
+  private initCostRange(manifest: DbManifest, listings: ExplorerListing[]): void {
+    const costs = listings.map((item) => item.totalCost).filter((value) => value > 0);
+    const dataMin = costs.length ? Math.min(...costs) : manifest.filter.minTotalCost;
+    const dataMax = costs.length ? Math.max(...costs) : manifest.filter.maxTotalCost;
+    const min = Math.min(manifest.filter.minTotalCost, dataMin);
+    const max = Math.max(manifest.filter.maxTotalCost, dataMax);
+    const bounds = { min: Math.floor(min / 50) * 50, max: Math.ceil(max / 50) * 50 };
+    this.costBounds.set(bounds);
+    this.minTotalCost.set(bounds.min);
+    this.maxTotalCost.set(bounds.max);
+  }
+
+  setMinTotalCost(value: number | string): void {
+    const bounds = this.costBounds();
+    const parsed = typeof value === 'string' ? Number(value) : value;
+    const next = Math.min(Math.max(parsed, bounds.min), this.maxTotalCost());
+    this.minTotalCost.set(next);
+    this.markCustomPreset();
+  }
+
+  setMaxTotalCost(value: number | string): void {
+    const bounds = this.costBounds();
+    const parsed = typeof value === 'string' ? Number(value) : value;
+    const next = Math.max(Math.min(parsed, bounds.max), this.minTotalCost());
+    this.maxTotalCost.set(next);
+    this.markCustomPreset();
+  }
+
+  resetCostRange(): void {
+    const bounds = this.costBounds();
+    this.minTotalCost.set(bounds.min);
+    this.maxTotalCost.set(bounds.max);
+    this.markCustomPreset();
   }
 
   toggleTier(tier: string): void {

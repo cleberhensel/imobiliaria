@@ -139,6 +139,47 @@
     </section>
 
     <section class="sidebar-block">
+      <div class="block-head">
+        <h2>Valor total</h2>
+        @if (state.costRangeActive()) {
+          <button type="button" class="text-btn" (click)="state.resetCostRange()">Limpar</button>
+        }
+      </div>
+      <div class="cost-range">
+        <div class="cost-range-values">
+          <span>{{ formatMoney(state.minTotalCost()) }}</span>
+          <span>{{ formatMoney(state.maxTotalCost()) }}</span>
+        </div>
+        <div class="cost-range-sliders">
+          <input
+            type="range"
+            class="cost-range-input cost-range-min"
+            [min]="state.costBounds().min"
+            [max]="state.costBounds().max"
+            step="50"
+            [ngModel]="state.minTotalCost()"
+            (ngModelChange)="state.setMinTotalCost($event)"
+            aria-label="Valor mínimo"
+          />
+          <input
+            type="range"
+            class="cost-range-input cost-range-max"
+            [min]="state.costBounds().min"
+            [max]="state.costBounds().max"
+            step="50"
+            [ngModel]="state.maxTotalCost()"
+            (ngModelChange)="state.setMaxTotalCost($event)"
+            aria-label="Valor máximo"
+          />
+        </div>
+        <div class="cost-range-bounds">
+          <span>{{ formatMoney(state.costBounds().min) }}</span>
+          <span>{{ formatMoney(state.costBounds().max) }}</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="sidebar-block">
       <h2>Imobiliária</h2>
       <div class="chip-group">
         @for (source of state.sourceOptions(); track source.id) {
