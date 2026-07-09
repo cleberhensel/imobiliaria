@@ -55,6 +55,9 @@ export class ExplorerState {
   readonly costBounds = signal<{ min: number; max: number }>({ min: 1500, max: 5000 });
   readonly minTotalCost = signal(1500);
   readonly maxTotalCost = signal(5000);
+  readonly areaBounds = signal<{ min: number; max: number }>({ min: 20, max: 200 });
+  readonly minArea = signal(20);
+  readonly maxArea = signal(200);
   readonly photoIndexById = signal<Map<string, number>>(new Map());
   readonly galleryExpandedById = signal<Map<string, boolean>>(new Map());
   readonly cardDataExpandedById = signal<Map<string, boolean>>(new Map());
@@ -67,6 +70,8 @@ export class ExplorerState {
     const sources = this.selectedSources();
     const minCost = this.minTotalCost();
     const maxCost = this.maxTotalCost();
+    const minArea = this.minArea();
+    const maxArea = this.maxArea();
 
     if (tier) items = items.filter((item) => item.tier === tier);
     if (neighbourhoods.size) {
@@ -74,6 +79,12 @@ export class ExplorerState {
     }
     if (sources.size) items = items.filter((item) => sources.has(item.source));
     items = items.filter((item) => item.totalCost >= minCost && item.totalCost <= maxCost);
+    if (this.areaRangeActive()) {
+      items = items.filter((item) => {
+        const area = item.area || 0;
+        return area >= minArea && area <= maxArea;
+      });
+    }
 
     const scored = items.map((item) => computeAdherence(item, this.priorities()));
     return sortListings(scored, this.sortKey());
@@ -82,6 +93,11 @@ export class ExplorerState {
   readonly costRangeActive = computed(() => {
     const bounds = this.costBounds();
     return this.minTotalCost() > bounds.min || this.maxTotalCost() < bounds.max;
+  });
+
+  readonly areaRangeActive = computed(() => {
+    const bounds = this.areaBounds();
+    return this.minArea() > bounds.min || this.maxArea() < bounds.max;
   });
 
   readonly compareCount = computed(() => this.pinned().size);
@@ -129,6 +145,7 @@ export class ExplorerState {
       const listings = await this.loadAllDetails(manifest, dicts);
       this.enriched.set(listings);
       this.initCostRange(manifest, listings);
+      this.initAreaRange(listings);
       this.restoreNeighbourhoodSelection();
       this.applyPreset('focus');
       this.setStatus('');
@@ -241,6 +258,42 @@ export class ExplorerState {
     const bounds = this.costBounds();
     this.minTotalCost.set(bounds.min);
     this.maxTotalCost.set(bounds.max);
+    this.markCustomPreset();
+  }
+
+  private initAreaRange(listings: ExplorerListing[]): void {
+    const areas = listings.map((item) => item.area || 0).filter((value) => value > 0);
+    const summary = this.summary()?.area;
+    const dataMin = areas.length ? Math.min(...areas) : summary?.min ?? 20;
+    const dataMax = areas.length ? Math.max(...areas) : summary?.max ?? 200;
+    const min = Math.max(10, Math.floor(dataMin / 5) * 5);
+    const max = Math.max(min + 5, Math.ceil(dataMax / 5) * 5);
+    const bounds = { min, max };
+    this.areaBounds.set(bounds);
+    this.minArea.set(bounds.min);
+    this.maxArea.set(bounds.max);
+  }
+
+  setMinArea(value: number | string): void {
+    const bounds = this.areaBounds();
+    const parsed = typeof value === 'string' ? Number(value) : value;
+    const next = Math.min(Math.max(parsed, bounds.min), this.maxArea());
+    this.minArea.set(next);
+    this.markCustomPreset();
+  }
+
+  setMaxArea(value: number | string): void {
+    const bounds = this.areaBounds();
+    const parsed = typeof value === 'string' ? Number(value) : value;
+    const next = Math.max(Math.min(parsed, bounds.max), this.minArea());
+    this.maxArea.set(next);
+    this.markCustomPreset();
+  }
+
+  resetAreaRange(): void {
+    const bounds = this.areaBounds();
+    this.minArea.set(bounds.min);
+    this.maxArea.set(bounds.max);
     this.markCustomPreset();
   }
 

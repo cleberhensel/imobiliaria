@@ -180,6 +180,47 @@
     </section>
 
     <section class="sidebar-block">
+      <div class="block-head">
+        <h2>Área (m²)</h2>
+        @if (state.areaRangeActive()) {
+          <button type="button" class="text-btn" (click)="state.resetAreaRange()">Limpar</button>
+        }
+      </div>
+      <div class="cost-range">
+        <div class="cost-range-values">
+          <span>{{ state.minArea() }} m²</span>
+          <span>{{ state.maxArea() }} m²</span>
+        </div>
+        <div class="cost-range-sliders">
+          <input
+            type="range"
+            class="cost-range-input cost-range-min"
+            [min]="state.areaBounds().min"
+            [max]="state.areaBounds().max"
+            step="5"
+            [ngModel]="state.minArea()"
+            (ngModelChange)="state.setMinArea($event)"
+            aria-label="Área mínima"
+          />
+          <input
+            type="range"
+            class="cost-range-input cost-range-max"
+            [min]="state.areaBounds().min"
+            [max]="state.areaBounds().max"
+            step="5"
+            [ngModel]="state.maxArea()"
+            (ngModelChange)="state.setMaxArea($event)"
+            aria-label="Área máxima"
+          />
+        </div>
+        <div class="cost-range-bounds">
+          <span>{{ state.areaBounds().min }} m²</span>
+          <span>{{ state.areaBounds().max }} m²</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="sidebar-block">
       <h2>Imobiliária</h2>
       <div class="chip-group">
         @for (source of state.sourceOptions(); track source.id) {
